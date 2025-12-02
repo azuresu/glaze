@@ -7,7 +7,7 @@ An auto-loaded global singleton added by plugin. It provides many useful functio
 Some important functions:
 | Function | Description |
 | --- | --- |
-| new_scene | Creates a new scene instance configured in scene data file. |
+| new_scene | Creates a new scene instance from cached packed scene which is configured in scene data file. |
 | rand_option | Returns an option randomly picked from an array. Chance of picking depends on the weights if specified. |
 | load_json_as_array | Load JSON file and make sure it is an array. Built-in types can be parsed optionally. |
 | load_json_as_dict | Load JSON file and make sure it is a dictionary. Built-in types can be parsed optionally. |
