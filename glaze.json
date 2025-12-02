@@ -1,0 +1,4 @@
+{
+	"log_level": "DEBUG",
+	"scene_data_files": ["res://data/scenes.json"]
+}

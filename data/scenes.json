@@ -1,0 +1,10 @@
+{
+	"ball": {
+		"scene_path": "res://scenes/ball.tscn",
+		"label_text": "Text is fine"
+	},
+	"ball2": {
+		"derived_scene": "ball",
+		"label_text": "Text is fine too"
+	}
+}

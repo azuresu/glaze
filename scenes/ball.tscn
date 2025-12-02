@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://xirhyiqb8unu"]
+
+[ext_resource type="Script" uid="uid://clwnywr1rdpq6" path="res://scenes/ball.gd" id="1_7s4qf"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_n1dj2"]
+
+[node name="Ball" type="Node3D"]
+script = ExtResource("1_7s4qf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_n1dj2")
+
+[node name="Label3D" type="Label3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+billboard = 1
+text = "YOU SHOULD NOT SEE THIS TEXT"
