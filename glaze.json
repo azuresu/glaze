@@ -1,4 +1,6 @@
 {
-	"log_level": "DEBUG",
-	"scene_data_files": ["res://data/scenes.json"]
+	"log_level": "INFO",
+	"log_rich_text": true,
+	"scene_data_allow_builtin_types": true,
+	"scene_data_files": ["res://scenes.json"]
 }

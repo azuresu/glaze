@@ -13,7 +13,7 @@ enum LogLevel {
 var log_level:= LogLevel.INFO
 var log_rich_text:= true
 
-var scene_data_files:= ["res://data/scenes.json"]
+var scene_data_files:= ["res://scenes.json"]
 var scene_data: Dictionary
 var scene_data_allow_builtin_types:= true
 
@@ -214,19 +214,20 @@ func _ready() -> void:
 			scene_data_allow_builtin_types = config["scene_data_allow_builtin_types"] as bool
 
 		if "scene_data_files" in config:
-			var scene_data_files:= config["scene_data_files"] as Array
-			for file in scene_data_files:
-				log_debug("Loading scene data file: %s" % file)
-				var data:= load_json_as_dict(file, scene_data_allow_builtin_types)
-				for scene_name in data:
-					if scene_name in scene_data:
-						scene_data[scene_name].merge(data[scene_name], true)
-						log_debug("Scene data merged: %s" % scene_name)
-					else:
-						scene_data[scene_name] = data[scene_name]
-						log_debug("Scene data added: %s" % scene_name)
-			for scene_name in scene_data:
-				_merge_derived_data(scene_name)
+			scene_data_files = config["scene_data_files"] as Array
+
+		for file in scene_data_files:
+			log_debug("Loading scene data file: %s" % file)
+			var data:= load_json_as_dict(file, scene_data_allow_builtin_types)
+			for scene_name in data:
+				if scene_name in scene_data:
+					scene_data[scene_name].merge(data[scene_name], true)
+					log_debug("Scene data merged: %s" % scene_name)
+				else:
+					scene_data[scene_name] = data[scene_name]
+					log_debug("Scene data added: %s" % scene_name)
+		for scene_name in scene_data:
+			_merge_derived_data(scene_name)
 	else:
 		log_warn("Missing configuration file: %s" % _CONFIG_FILE)
 
