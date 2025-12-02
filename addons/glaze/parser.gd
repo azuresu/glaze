@@ -86,11 +86,11 @@ class ColorParser extends Parser:
 		return s.begins_with("Color(") and s.ends_with(")")
 
 	func parse(s: String) -> Variant:
-		var rgba = s.substr(6, s.length() - 7).split(",")
-		return Color(float(rgba[0]), float(rgba[1]), float(rgba[2]), float(rgba[3]))
+		var html:= s.substr(6, s.length() - 7)
+		return Color(html)
 
 	func can_format(v: Variant) -> bool:
 		return v is Color
 
 	func format(v: Variant) -> String:
-		return "Color(%s,%s,%s,%s)" % [v.r, v.g, v.b, v.a]
+		return "Color(%s)" % v.to_html()
