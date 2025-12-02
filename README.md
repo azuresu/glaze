@@ -1,12 +1,12 @@
-# Glaze
-Godot library by azuresu
+# Project Glaze
+Godot library by azuresu. It works as a plugin.
 
 # Functions
 ## Glaze
 An auto-loaded global singleton added by plugin. It provides many useful functions.
 
 ## Version
-A simple class represents version in: major.minor.patch.build
+A simple class represents version in: major.minor.patch.build.
 
 ## Parser
 A class provides parsing and formating on various types when working with JSON.
