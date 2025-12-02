@@ -15,12 +15,15 @@ var log_rich_text:= true
 
 var scene_data_files:= ["res://data/scenes.json"]
 var scene_data: Dictionary
-var packed_scenes: Dictionary[String, Resource]
+var scene_data_allow_builtin_types:= true
+
+var _builtin_parsers: Array[Parser]
+var _packed_scenes: Dictionary[String, Resource]
 
 ## Creates a new scene and adds it to parent when provided.
 ## The new-created scene is an instance of cached packed scene which is defined in scene file.
 func new_scene(scene_name: String, parent: Node = null) -> Node:
-	if not scene_name in packed_scenes:
+	if not scene_name in _packed_scenes:
 		var scene_path: String
 		if scene_name in scene_data:
 			var data: Dictionary = scene_data[scene_name]
@@ -31,11 +34,11 @@ func new_scene(scene_name: String, parent: Node = null) -> Node:
 			log_warn("Scene path is not defined with scene name: %s" % scene_name)
 		var s:= load(scene_path)
 		if s:
-			packed_scenes[scene_name] = s
+			_packed_scenes[scene_name] = s
 		else:
 			log_error("Scene not found: %s" % scene_path)
-	if scene_name in packed_scenes:
-		var scene: Node = packed_scenes[scene_name].instantiate()
+	if scene_name in _packed_scenes:
+		var scene: Node = _packed_scenes[scene_name].instantiate()
 		# Copy data into scene.
 		if scene_name in scene_data:
 			var data: Dictionary = scene_data[scene_name]
@@ -117,14 +120,52 @@ func log_msg(level: LogLevel, message: String) -> void:
 		else:
 			print("%s | %s | %s" % [time_str, _LOG_LEVEL_NAMES[level], message])
 
+## Adds built-in parser.
+## Added parser is always inserted to the first position in parser queue therefore it has chance to override default parsers.
+func add_builtin_parser(parser: Parser) -> void:
+	_builtin_parsers.insert(0, parser)
+
+## Removes built-in parser.
+func remove_builtin_parser(parser: Parser) -> void:
+	_builtin_parsers.erase(parser)
+
+## Parses given argument with built-in parsers.
+func parse_builtin_types(value: Variant) -> Variant:
+	if value is Array:
+		for i in value.size():
+			value[i] = parse_builtin_types(value[i])
+	elif value is Dictionary:
+		for k in value:
+			value[k] = parse_builtin_types(value[k])
+	elif value is String:
+		for p in _builtin_parsers:
+			if p.can_parse(value):
+				return p.parse(value)
+	return value
+
+## Formats given argument with built-in parsers.
+func format_builtin_types(value: Variant) -> Variant:
+	if value is Array:
+		for i in value.size():
+			value[i] = format_builtin_types(value[i])
+	elif value is Dictionary:
+		for k in value:
+			value[k] = format_builtin_types(value[k])
+	for p in _builtin_parsers:
+		if p.can_format(value):
+			return p.format(value)
+	return value
+
 ## Loads JSON as dictionary from file.
-func load_json_as_dict(filename: String) -> Dictionary:
+func load_json_as_dict(filename: String, parse_builtin_types:= false) -> Dictionary:
 	var json = JSON.new()
 	var file = FileAccess.open(filename, FileAccess.READ)
 	if file:
 		var error = json.parse(file.get_as_text())
 		if not error:
 			if json.data is Dictionary:
+				if parse_builtin_types:
+					parse_builtin_types(json.data)
 				return json.data
 			else:
 				log_error("JSON is not a dictionary in json file: %s" % filename)
@@ -135,13 +176,15 @@ func load_json_as_dict(filename: String) -> Dictionary:
 	return {}
 
 ## Loads JSON as array from file.
-func load_json_as_array(filename: String) -> Array:
+func load_json_as_array(filename: String, parse_builtin_types:= false) -> Array:
 	var json = JSON.new()
 	var file = FileAccess.open(filename, FileAccess.READ)
 	if file:
 		var error = json.parse(file.get_as_text())
 		if not error:
 			if json.data is Array:
+				if parse_builtin_types:
+					parse_builtin_types(json.data)
 				return json.data
 			else:
 				log_error("JSON is not an array in json file: %s" % filename)
@@ -152,6 +195,9 @@ func load_json_as_array(filename: String) -> Array:
 	return []
 
 func _ready() -> void:
+
+	_builtin_parsers.append_array(Parser.builtin_parsers)
+
 	if FileAccess.file_exists(_CONFIG_FILE):
 		var config:= load_json_as_dict(_CONFIG_FILE)
 		if "log_level" in config:
@@ -164,11 +210,14 @@ func _ready() -> void:
 		if "log_rich_text" in config:
 			log_rich_text = config["log_rich_text"] as bool
 
+		if "scene_data_allow_builtin_types" in config:
+			scene_data_allow_builtin_types = config["scene_data_allow_builtin_types"] as bool
+
 		if "scene_data_files" in config:
 			var scene_data_files:= config["scene_data_files"] as Array
 			for file in scene_data_files:
 				log_debug("Loading scene data file: %s" % file)
-				var data:= load_json_as_dict(file)
+				var data:= load_json_as_dict(file, scene_data_allow_builtin_types)
 				for scene_name in data:
 					if scene_name in scene_data:
 						scene_data[scene_name].merge(data[scene_name], true)

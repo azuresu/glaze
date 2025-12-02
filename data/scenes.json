@@ -1,10 +1,12 @@
 {
 	"ball": {
 		"scene_path": "res://scenes/ball.tscn",
-		"label_text": "Text is fine"
+		"label_text": "Text is fine",
+		"position": "Vector3(-1, 0, 0)"
 	},
 	"ball2": {
 		"derived_scene": "ball",
-		"label_text": "Text is fine too"
+		"label_text": "Text is fine too",
+		"position": "Vector3(1, 0, 0)"
 	}
 }
