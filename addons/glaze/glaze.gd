@@ -1,4 +1,6 @@
 extends Node
+## A toolkit class provides many useful functions to make developing game in GDScript easier (hopefully).
+## This class will be auto-loaded as a Global once plugin is enabled.
 
 const _CONFIG_FILE:= "res://glaze.json"
 const _LOG_LEVEL_NAMES:= ["DEBUG", "INFO ", "WARN ", "ERROR", "FATAL"]
@@ -15,6 +17,8 @@ var scene_data_files:= ["res://data/scenes.json"]
 var scene_data: Dictionary
 var packed_scenes: Dictionary[String, Resource]
 
+## Creates a new scene and adds it to parent when provided.
+## The new-created scene is an instance of cached packed scene which is defined in scene file.
 func new_scene(scene_name: String, parent: Node = null) -> Node:
 	if not scene_name in packed_scenes:
 		var scene_path: String
@@ -47,9 +51,11 @@ func new_scene(scene_name: String, parent: Node = null) -> Node:
 		return scene
 	return null
 
+## Returns the first argument if it is a valid instance, otherwise returns the second argument.
 func validate(obj: Variant, dft: Variant = null) -> Variant:
 	return obj if is_instance_valid(obj) else dft
 
+## Returns an element from options randomly depends on the weights if specified.
 func rand_option(options: Array, weights:= []) -> Variant:
 	var sum:= 0.0
 	var chances:= []
@@ -62,30 +68,46 @@ func rand_option(options: Array, weights:= []) -> Variant:
 			return options[i]
 	return null
 
-func rand_vector2(dist_min:= 1.0, dist_max:= dist_min, offset:= Vector2.ZERO) -> Vector2:
-	return Vector2.UP.rotated(randf_range(0, TAU)) * randf_range(dist_min, dist_max) + offset
+## Returns a value which is the addition of base and offset but also limited in range (from - inclusive, to - exclusive).
+func cycle_range(base: int, offset: int, from: int, to: int) -> int:
+	var r:= to - from
+	var v = base + offset - from
+	while v < 0: # Why am I so stupid?
+		v += r
+	return v % r + from
 
-func rand_vector3(dist_min:= 1.0, dist_max:= dist_min, offset:= Vector3.ZERO) -> Vector3:
-	return Vector3.FORWARD.rotated(Vector3.UP, randf_range(0, TAU)).rotated(Vector3.RIGHT, randf_range(0, TAU)) * randf_range(dist_min, dist_max) + offset
+## Frees children from parent.
+func free_children(parent: Node, filter:= func(ch): return true) -> void:
+	for ch in parent.get_children():
+		if filter.call(ch):
+			parent.remove_child(ch)
+			ch.queue_free()
 
+## Returns wether log level is DEBUG.
 func log_debug_enabled() -> bool:
 	return log_level == LogLevel.DEBUG
 
+## Logs a debug-level message.
 func log_debug(message: String) -> void:
 	return log_msg(LogLevel.DEBUG, message)
 
+## Logs an info-level message.
 func log_info(message: String) -> void:
 	return log_msg(LogLevel.INFO, message)
 
+## Logs a warn-level message.
 func log_warn(message: String) -> void:
 	return log_msg(LogLevel.WARN, message)
 
+## Logs an error-level message.
 func log_error(message: String) -> void:
 	return log_msg(LogLevel.ERROR, message)
 
+## Logs a fatal-level message.
 func log_fatal(message: String) -> void:
 	return log_msg(LogLevel.FATAL, message)
 
+## Logs a message with specified level.
 func log_msg(level: LogLevel, message: String) -> void:
 	if level >= log_level:
 		var time = Time.get_datetime_dict_from_system()
@@ -95,6 +117,7 @@ func log_msg(level: LogLevel, message: String) -> void:
 		else:
 			print("%s | %s | %s" % [time_str, _LOG_LEVEL_NAMES[level], message])
 
+## Loads JSON as dictionary from file.
 func load_json_as_dict(filename: String) -> Dictionary:
 	var json = JSON.new()
 	var file = FileAccess.open(filename, FileAccess.READ)
@@ -111,6 +134,7 @@ func load_json_as_dict(filename: String) -> Dictionary:
 		log_error("File not found: %s" % filename)
 	return {}
 
+## Loads JSON as array from file.
 func load_json_as_array(filename: String) -> Array:
 	var json = JSON.new()
 	var file = FileAccess.open(filename, FileAccess.READ)
