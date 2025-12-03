@@ -4,14 +4,16 @@ extends Node
 @export var source: Node
 @export var source_var: String
 @export var updates_per_second:= 60
+@export var update_ratio:= 1.0
 
 var _update_delta: float
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
-	if updates_per_second > 0:
-		var _timeout:= 1.0 / updates_per_second
+	var ups:= updates_per_second * update_ratio
+	if ups > 0:
+		var _timeout:= 1.0 / ups
 		_update_delta += delta
 		if _update_delta >= _timeout:
 			_eval()
