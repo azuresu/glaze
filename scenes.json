@@ -1,13 +1,13 @@
 {
 	"ball": {
 		"scene_path": "res://scenes/ball.tscn",
-		"label_text": "Text is fine",
+		"label_text": "Ball on left",
 		"position": "Vector3(-1, 0, 0)",
 		"dummy_prop": true
 	},
 	"ball2": {
 		"derived_scene": "ball",
-		"label_text": "Text is fine too",
+		"label_text": "Ball on right",
 		"position": "Vector3(1, 0, 0)"
 	}
 }
