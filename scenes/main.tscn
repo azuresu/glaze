@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dev3qn47u2w17"]
+[gd_scene load_steps=3 format=3 uid="uid://dev3qn47u2w17"]
 
 [ext_resource type="Script" uid="uid://b3xyw6m2r7xlh" path="res://scenes/main.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://46l7q0rcq4wj" path="res://addons/glaze/custom/evaluation.gd" id="2_0wfyh"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_ig7tw")
@@ -12,6 +13,24 @@ transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 2, 3)
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 
 [node name="Version" type="Label3D" parent="."]
-unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 billboard = 1
+
+[node name="text" type="Node" parent="Version" node_paths=PackedStringArray("source")]
+script = ExtResource("2_0wfyh")
+source = NodePath("../..")
+source_var = "version"
+metadata/_custom_type_script = "uid://46l7q0rcq4wj"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "???"
+
+[node name="text" type="Node" parent="CanvasLayer/Label" node_paths=PackedStringArray("source")]
+script = ExtResource("2_0wfyh")
+source = NodePath("../../..")
+source_var = "fps"
+metadata/_custom_type_script = "uid://46l7q0rcq4wj"

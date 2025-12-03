@@ -1,7 +1,7 @@
 # Project Glaze
 Godot Library by AZurEsu. It works as a plugin.
 
-## Functions
+## Scripts
 ### Glaze
 An auto-loaded global singleton added by plugin. It provides many useful functions.
 Some important functions:
@@ -17,6 +17,10 @@ A simple class represents version in: major.minor.patch.build.
 
 ### Parser
 A class provides parsing and formating on various types when working with JSON.
+
+## Custom nodes
+### Evaluation
+A unidirectional binding which updates property automatically with configured source.
 
 ## Setup
 
