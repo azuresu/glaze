@@ -1,5 +1,5 @@
 # Project Glaze
-Godot library by azuresu. It works as a plugin.
+Godot Library by AZurEsu. It works as a plugin.
 
 ## Functions
 ### Glaze
