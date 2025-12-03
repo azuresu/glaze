@@ -16,7 +16,7 @@ func _update_table() -> void:
 				props[key] = 1
 	%Table.columns = props.size() + 1
 
-	_add_table_cell("SCENE NAME", true)
+	_add_table_cell("SCENE_NAME", true)
 	for k in props:
 		_add_table_cell(k, true)
 
