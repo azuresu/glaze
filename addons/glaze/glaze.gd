@@ -1,8 +1,10 @@
+@tool
 extends Node
 ## A toolkit class provides many useful functions to make developing game in GDScript easier (hopefully).
 ## This class will be auto-loaded as a Global once plugin is enabled.
 
 const _CONFIG_FILE:= "res://glaze.json"
+const _DEFAULT_SCENE_DATA_FILE:= "res://scenes.json"
 const _LOG_LEVEL_NAMES:= ["DEBUG", "INFO ", "WARN ", "ERROR", "FATAL"]
 const _LOG_LEVEL_COLORS:= ["gray", "white", "yellow", "red", "purple"]
 
@@ -10,12 +12,11 @@ enum LogLevel {
 	DEBUG, INFO, WARN, ERROR, FATAL
 }
 
-var log_level:= LogLevel.INFO
-var log_rich_text:= true
-
-var scene_data_files:= ["res://scenes.json"]
+var log_level: LogLevel
+var log_rich_text: bool
+var scene_data_files: Array
 var scene_data: Dictionary
-var scene_data_allow_builtin_types:= true
+var scene_data_allow_builtin_types: bool
 
 var _builtin_parsers: Array[Parser]
 var _packed_scenes: Dictionary[String, Resource]
@@ -194,10 +195,17 @@ func load_json_as_array(filename: String, parse_builtin_types:= false) -> Array:
 		log_error("File not found: %s" % filename)
 	return []
 
-func _ready() -> void:
-
-	_builtin_parsers.append_array(Parser.builtin_parsers)
-
+func reload() -> void:
+	# Reset to default.
+	log_level = LogLevel.INFO
+	log_rich_text = true
+	scene_data_files.clear()
+	scene_data_files.append(_DEFAULT_SCENE_DATA_FILE)
+	scene_data.clear()
+	scene_data_allow_builtin_types = true
+	# Clear cache.
+	_packed_scenes.clear()
+	# Load config.
 	if FileAccess.file_exists(_CONFIG_FILE):
 		var config:= load_json_as_dict(_CONFIG_FILE)
 		if "log_level" in config:
@@ -230,6 +238,10 @@ func _ready() -> void:
 			_merge_derived_data(scene_name)
 	else:
 		log_warn("Missing configuration file: %s" % _CONFIG_FILE)
+
+func _ready() -> void:
+	_builtin_parsers.append_array(Parser.builtin_parsers)
+	reload()
 
 func _merge_derived_data(scene_name: String, derived_chain:= {}) -> Dictionary:
 	if scene_name in scene_data:

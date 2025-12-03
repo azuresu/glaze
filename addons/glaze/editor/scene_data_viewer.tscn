@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxwd1x432f8gd"]
+
+[ext_resource type="Script" uid="uid://cukdbc5c15jia" path="res://addons/glaze/editor/scene_data_viewer.gd" id="1_rosgp"]
+
+[node name="SceneDataViewer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_rosgp")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Filter" type="LineEdit" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Enter text to filter..."
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Table" type="GridContainer" parent="VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 4
+
+[connection signal="draw" from="." to="." method="_on_draw"]
+[connection signal="text_changed" from="VBoxContainer/Filter" to="." method="_on_filter_text_changed"]

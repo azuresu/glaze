@@ -1,6 +1,8 @@
 @tool
 extends EditorPlugin
 
+var scene_data_viewer: Control
+
 func _enable_plugin() -> void:
 	add_autoload_singleton("Glaze", "res://addons/glaze/glaze.gd")
 	print("Plugin Glaze enabled.")
@@ -10,7 +12,9 @@ func _disable_plugin() -> void:
 	print("Plugin Glaze disabled.")
 
 func _enter_tree() -> void:
-	pass
+	scene_data_viewer = preload("res://addons/glaze/editor/scene_data_viewer.tscn").instantiate()
+	add_control_to_bottom_panel(scene_data_viewer, "Scene Data")
 
 func _exit_tree() -> void:
-	pass
+	remove_control_from_bottom_panel(scene_data_viewer)
+	scene_data_viewer.free()
