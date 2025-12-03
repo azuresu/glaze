@@ -1,8 +1,12 @@
 @tool
-extends Node
+@icon("res://addons/glaze/custom/evaluate.png")
+class_name Evaluate extends Node
 
+## Source of evaluation
 @export var source: Node
+## Name of the variable or function in the source.
 @export var source_var: String
+
 @export var updates_per_second:= 60
 @export var update_ratio:= 1.0
 

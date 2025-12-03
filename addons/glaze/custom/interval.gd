@@ -1,5 +1,6 @@
 @tool
-extends Node
+@icon("res://addons/glaze/custom/interval.png")
+class_name Interval extends Node
 
 @export var updates_per_second:= 60
 @export var update_ratio:= 1.0
