@@ -24,6 +24,11 @@ unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Enter text to filter..."
 
+[node name="Result" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 2
+
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3

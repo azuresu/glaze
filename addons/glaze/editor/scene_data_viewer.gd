@@ -20,11 +20,14 @@ func _update_table() -> void:
 	for k in props:
 		_add_table_cell(k, true)
 
+	var count:= 0
 	for name: String in Glaze.scene_data:
 		if not filter_text or name.contains(filter_text):
+			count += 1
 			var data: Dictionary = Glaze.scene_data[name]
 			_add_table_cell(name)
 			_add_table_row(data, props.keys())
+	%Result.text = "Found %s result(s)" % count
 
 func _add_table_cell(value: Variant, head:= false) -> void:
 	var cell_style:= _new_cell_style()
