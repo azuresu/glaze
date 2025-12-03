@@ -73,6 +73,14 @@ func rand_option(options: Array, weights:= []) -> Variant:
 			return options[i]
 	return null
 
+## Returns a random Vector2 which has a distance in range.
+func rand_vector2(dist_min:= 1.0, dist_max:= dist_min) -> Vector2:
+	return Vector2.RIGHT.rotated(randf_range(0, TAU)) * randf_range(dist_min, dist_max)
+
+## Returns a random Vector3 which has a distance in range.
+func rand_vector3(dist_min:= 1.0, dist_max:= dist_min) -> Vector3:
+	return Vector3.FORWARD.rotated(Vector3.UP, randf_range(0, TAU)).rotated(Vector3.RIGHT, randf_range(0, TAU)) * randf_range(dist_min, dist_max)
+
 ## Returns a value which is the addition of base and offset but also limited in range (from - inclusive, to - exclusive).
 func cycle_range(base: int, offset: int, from: int, to: int) -> int:
 	var r:= to - from
@@ -80,6 +88,34 @@ func cycle_range(base: int, offset: int, from: int, to: int) -> int:
 	while v < 0: # Why am I so stupid?
 		v += r
 	return v % r + from
+
+## Moves float forward with given speed and delta.
+func move_float(from: float, to: float, speed: float, delta: float) -> float:
+	var diff = abs(to - from)
+	if diff > 0:
+		return lerpf(from, to, minf(speed * delta, diff) / diff)
+	return to
+
+## Moves angle forward with given speed and delta.
+func move_angle(from: float, to: float, speed: float, delta: float) -> float:
+	var diff:= absf(angle_difference(from, to))
+	if diff > 0:
+		return lerp_angle(from, to, minf(speed * delta, diff) / diff)
+	return to
+
+## Moves Vector2 forward with given speed and delta.
+func move_vector2(from: Vector2, to: Vector2, speed: float, delta: float) -> Vector2:
+	var diff = to.distance_to(from)
+	if diff > 0:
+		return lerp(from, to, minf(speed * delta, diff) / diff)
+	return to
+
+## Moves Vector3 forward with given speed and delta.
+func move_vector3(from: Vector3, to: Vector3, speed: float, delta: float) -> Vector3:
+	var diff = to.distance_to(from)
+	if diff > 0:
+		return lerp(from, to, minf(speed * delta, diff) / diff)
+	return to
 
 ## Frees children from parent.
 func free_children(parent: Node, filter:= func(ch): return true) -> void:
