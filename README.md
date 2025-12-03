@@ -19,6 +19,17 @@ A simple class represents version in: major.minor.patch.build.
 A class provides parsing and formating on various types when working with JSON.
 
 ## Setup
+
+### Copy addons
+Copy directory 'addons' to your project.
+
+### Use symlink
+Run following command with administrator privilege:
+
+`mklink /D <project_dir>\addons\glaze <glaze_dir>\addons\glaze`
+
+### Add configuration file (optional but highly recommended)
+
 Once installed plugin, you may create a JSON file under your project directory and named it 'glaze.json'.
 This is the configuration this plugin reads whenever game starts.
 
