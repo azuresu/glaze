@@ -19,8 +19,11 @@ A simple class represents version in: major.minor.patch.build.
 A class provides parsing and formating on various types when working with JSON.
 
 ## Custom nodes
-### Evaluation
+### Evaluate
 A unidirectional binding which updates property automatically with configured source.
+
+### Interval
+A timer calls a func on the parent node periodically.
 
 ## Setup
 

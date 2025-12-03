@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cpj5f76f3wfn0"
-path="res://.godot/imported/evaluation.png-0349ce020bafeeddaa7d990ec1ae6e0b.ctex"
+uid="uid://cc7svm2rq80st"
+path="res://.godot/imported/interval.png-76a4040023bc908eee921aed6c61cfc0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/glaze/custom/evaluation.png"
-dest_files=["res://.godot/imported/evaluation.png-0349ce020bafeeddaa7d990ec1ae6e0b.ctex"]
+source_file="res://addons/glaze/custom/interval.png"
+dest_files=["res://.godot/imported/interval.png-76a4040023bc908eee921aed6c61cfc0.ctex"]
 
 [params]
 
