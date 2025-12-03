@@ -2,7 +2,8 @@
 	"ball": {
 		"scene_path": "res://scenes/ball.tscn",
 		"label_text": "Text is fine",
-		"position": "Vector3(-1, 0, 0)"
+		"position": "Vector3(-1, 0, 0)",
+		"dummy_prop": true
 	},
 	"ball2": {
 		"derived_scene": "ball",

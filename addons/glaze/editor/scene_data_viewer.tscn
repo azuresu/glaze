@@ -33,7 +33,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
-columns = 4
+columns = 5
 
 [connection signal="draw" from="." to="." method="_on_draw"]
 [connection signal="text_changed" from="VBoxContainer/Filter" to="." method="_on_filter_text_changed"]

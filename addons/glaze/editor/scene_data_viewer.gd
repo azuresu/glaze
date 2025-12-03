@@ -27,20 +27,17 @@ func _update_table() -> void:
 			_add_table_row(data, props.keys())
 
 func _add_table_cell(value: Variant, head:= false) -> void:
-	var even: bool = (%Table.get_child_count() / %Table.columns) % 2 == 0
-	var row_style:= StyleBoxFlat.new()
-	row_style.set_content_margin_all(4)
-	row_style.bg_color = Color(0, 0, 0, 0.2) if even else Color(1, 1, 1, 0.2)
-	var l = Label.new()
-	l.set("theme_override_styles/normal", row_style)
+	var cell_style:= _new_cell_style()
+	var cell_label = Label.new()
+	cell_label.set("theme_override_styles/normal", cell_style)
 	var s:= str(value)
 	if head:
 		var fv:= FontVariation.new()
 		fv.variation_embolden = 0.5
-		l.set("theme_override_fonts/font", fv)
+		cell_label.set("theme_override_fonts/font", fv)
 		s = s.to_upper()
-	l.text = s
-	%Table.add_child(l)
+	cell_label.text = s
+	%Table.add_child(cell_label)
 
 func _add_table_head(heads: Array) -> void:
 	for h in heads:
@@ -52,6 +49,20 @@ func _add_table_row(dict: Dictionary, keys: Array) -> void:
 		if k in dict:
 			v = dict[k]
 		_add_table_cell(v)
+
+func _new_cell_style() -> StyleBoxFlat:
+	var even: bool = (%Table.get_child_count() / %Table.columns) % 2 == 0
+	var last: bool = (%Table.get_child_count() + 1) % %Table.columns == 0
+	var s:= StyleBoxFlat.new()
+	s.content_margin_top = 5
+	s.content_margin_bottom = 5
+	s.content_margin_left = 10
+	s.content_margin_right = 10
+	s.bg_color = Color(0, 0, 0, 0.05) if even else Color(1, 1, 1, 0.05)
+	if not last:
+		s.border_color = Color(1, 1, 1, 0.15)
+		s.border_width_right = 1.0
+	return s
 
 func _on_filter_text_changed(new_text: String) -> void:
 	_update_table()

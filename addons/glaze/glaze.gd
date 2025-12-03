@@ -196,6 +196,7 @@ func load_json_as_array(filename: String, parse_builtin_types:= false) -> Array:
 	return []
 
 func reload() -> void:
+	log_info("Reloading configuration: %s" % _CONFIG_FILE)
 	# Reset to default.
 	log_level = LogLevel.INFO
 	log_rich_text = true
@@ -236,6 +237,7 @@ func reload() -> void:
 					log_debug("Scene data added: %s" % scene_name)
 		for scene_name in scene_data:
 			_merge_derived_data(scene_name)
+		log_info("Loaded scenes: %s" % scene_data.size())
 	else:
 		log_warn("Missing configuration file: %s" % _CONFIG_FILE)
 
