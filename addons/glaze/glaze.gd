@@ -238,8 +238,8 @@ func load_json_as_array(filename: String, parse_builtin_types:= false) -> Array:
 		log_error("File not found: %s", filename)
 	return []
 
-func reload() -> void:
-	log_info("Reloading configuration: %s", _CONFIG_FILE)
+func load_config() -> void:
+	log_info("Loading configuration: %s", _CONFIG_FILE)
 	# Reset to default.
 	log_level = LogLevel.INFO
 	log_rich_text = true
@@ -286,7 +286,7 @@ func reload() -> void:
 
 func _ready() -> void:
 	_builtin_parsers.append_array(Parser.builtin_parsers)
-	reload()
+	load_config()
 
 func _merge_derived_data(scene_name: String, derived_chain:= {}) -> Dictionary:
 	if scene_name in scene_data:

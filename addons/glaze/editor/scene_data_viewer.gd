@@ -71,5 +71,5 @@ func _on_filter_text_changed(new_text: String) -> void:
 	_update_table()
 
 func _on_draw() -> void:
-	Glaze.reload()
+	Glaze.load_config()
 	_update_table()
