@@ -4,7 +4,6 @@ extends Node
 ## This class will be auto-loaded as a Global once plugin is enabled.
 
 const _CONFIG_FILE:= "res://glaze.json"
-const _DEFAULT_SCENE_DATA_FILE:= "res://scenes.json"
 const _LOG_LEVEL_NAMES:= ["DEBUG", "INFO ", "WARN ", "ERROR", "FATAL"]
 const _LOG_LEVEL_COLORS:= ["gray", "white", "yellow", "red", "purple"]
 
@@ -244,7 +243,6 @@ func load_config() -> void:
 	log_level = LogLevel.INFO
 	log_rich_text = true
 	scene_data_files.clear()
-	scene_data_files.append(_DEFAULT_SCENE_DATA_FILE)
 	scene_data.clear()
 	scene_data_allow_builtin_types = true
 	# Clear cache.
@@ -268,19 +266,22 @@ func load_config() -> void:
 		if "scene_data_files" in config:
 			scene_data_files = config["scene_data_files"] as Array
 
-		for file in scene_data_files:
-			log_debug("Loading scene data file: %s", file)
-			var data:= load_json_as_dict(file, scene_data_allow_builtin_types)
-			for scene_name in data:
-				if scene_name in scene_data:
-					scene_data[scene_name].merge(data[scene_name], true)
-					log_debug("Scene data merged: %s", scene_name)
-				else:
-					scene_data[scene_name] = data[scene_name]
-					log_debug("Scene data added: %s", scene_name)
-		for scene_name in scene_data:
-			_merge_derived_data(scene_name)
-		log_info("Loaded scenes: %s", scene_data.size())
+		if scene_data_files:
+			for file in scene_data_files:
+				log_debug("Loading scene data file: %s", file)
+				var data:= load_json_as_dict(file, scene_data_allow_builtin_types)
+				for scene_name in data:
+					if scene_name in scene_data:
+						scene_data[scene_name].merge(data[scene_name], true)
+						log_debug("Scene data merged: %s", scene_name)
+					else:
+						scene_data[scene_name] = data[scene_name]
+						log_debug("Scene data added: %s", scene_name)
+			for scene_name in scene_data:
+				_merge_derived_data(scene_name)
+			log_info("Loaded scenes: %s", scene_data.size())
+		else:
+			log_warn("Missing scene data files in configuration.")
 	else:
 		log_warn("Missing configuration file: %s", _CONFIG_FILE)
 
