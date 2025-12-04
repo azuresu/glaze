@@ -249,7 +249,7 @@ func load_config() -> void:
 	scene_data_allow_builtin_types = true
 	# Clear cache.
 	_packed_scenes.clear()
-	# Load config.
+	# Read config file.
 	if FileAccess.file_exists(_CONFIG_FILE):
 		var config:= load_json_as_dict(_CONFIG_FILE)
 		if "log_level" in config:
