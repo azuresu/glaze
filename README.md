@@ -25,6 +25,9 @@ A unidirectional binding which updates property automatically with configured so
 ### Interval
 A timer calls a func on the parent node periodically.
 
+### StateMachine and State
+A simple state machine.
+
 ## Setup
 
 ### Copy addons

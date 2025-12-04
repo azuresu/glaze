@@ -1,5 +1,6 @@
 @tool
 @icon("res://addons/glaze/custom/state.png")
+## Put this node under StateMachine node.
 class_name State extends Node
 
 var machine: StateMachine
