@@ -79,13 +79,33 @@ A unidirectional binding which updates property automatically with configured so
 
 A timer calls a func on the parent node periodically. After being added into parent, name it with the func name you want to call.
 
-一个定时器节点，用来周期性调用某个方法。加入场景树后，请以需要调用的函数名来命名该节点。
+一个间隔器节点，用来周期性调用某个方法。加入场景树后，请以需要调用的函数名来命名该节点。
+
+Comparing with Godot bulti-in timer, it has advantages:
+	
+和戈多自带的Timer相比，该节点有以下优点：
+
+- Stable interval when it is small;
+
+稳定的间隔时间，即使这个时间很短；
+
+- Easy to config: name it with called func;
+
+方便使用：直接以被调用的函数名称来命名；
+
+- Flexiable interval config with ratio in runtime;
+
+通过速率参数可灵活控制运行期的间隔时间；
+
+- Random start-up to reduce clog when large amount of Intervals added into scene tree (for example when game is loaded).
+
+随机的启动时间用来在大量间隔器同时加入场景树时减少卡顿（比如读取游戏存盘时）。
 
 ### StateMachine and State
 
-A simple implementation of state machine.
+A simple implementation of state machine. Just another lovely wheel :)
 
-一个简单的状态机实现。
+一个简单的状态机实现。就另一个可爱的轮子罢了：）
 
 ## Setup
 
