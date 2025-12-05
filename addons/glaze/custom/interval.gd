@@ -4,7 +4,7 @@
 class_name Interval extends Node
 
 ## How many times the func will be called in a second.
-@export var updates_per_second:= 60
+@export var updates_per_second:= 60.0
 ## The actual calls per second is updates_per_second * update_ratio.
 @export var update_ratio:= 1.0
 ## start at random timing to avoid a large amount of simultaneous burst.
