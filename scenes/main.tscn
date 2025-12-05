@@ -45,5 +45,5 @@ metadata/_custom_type_script = "uid://46l7q0rcq4wj"
 
 [node name="update_time" type="Node" parent="."]
 script = ExtResource("3_sugp2")
-updates_per_second = 1
+updates_per_second = 1.0
 metadata/_custom_type_script = "uid://qwie7ll7rwex"
