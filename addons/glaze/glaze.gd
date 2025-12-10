@@ -82,11 +82,14 @@ func rand_vector3(dist_min:= 1.0, dist_max:= dist_min) -> Vector3:
 
 ## Returns a value which is the addition of base and offset but also limited in range (from - inclusive, to - exclusive).
 func cycle_range(base: int, offset: int, from: int, to: int) -> int:
-	var r:= to - from
-	var v = base + offset - from
-	while v < 0: # Why am I so stupid?
-		v += r
-	return v % r + from
+	if to > from:
+		var r:= to - from
+		var v = base + offset - from
+		while v < 0: # Why am I so stupid?
+			v += r
+		return v % r + from
+	Glaze.log_error("Invalid cycle range from: %s to %s", from, to)
+	return base
 
 ## Moves float forward with given speed and delta.
 func move_float(from: float, to: float, speed: float, delta: float) -> float:
