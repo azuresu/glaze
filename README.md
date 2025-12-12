@@ -67,6 +67,27 @@ A class provides parsing and formating on various types when working with JSON. 
 
 解析器类提供额外的解析和格式化JSON数据能力。用户可以定制自己的解析器加入Glaze中。
 
+### CustomImport
+A customizable post-import script utilizes regular expression to locate nodes and process.
+
+一个可定制的导入脚本，该脚本使用正则表达式来过滤节点并处理。
+
+A simple example to use this script to hide all nodes which have name ends with *_invis*:
+
+一个简单的例子，隐藏所有名字以 *_invis* 结尾的节点：
+
+```
+@tool
+extends CustomImport
+
+func _customize() -> void:
+	add_callback("_invis\\z", _set_invis) # Returns false if regex failed to compile.
+
+func _set_invis() -> void:
+	if node is Node3D:
+		node.visible = false
+```
+
 ## Custom nodes
 
 ### Evaluate
