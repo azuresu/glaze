@@ -10,7 +10,7 @@ var current_state: State
 var states: Dictionary
 
 func set_current_state(state_name: String, params:= {}) -> void:
-	call_deferred("_set_current_state", state_name, params)
+	_set_current_state.call_deferred(state_name, params)
 
 func _ready() -> void:
 	for ch in get_children():
