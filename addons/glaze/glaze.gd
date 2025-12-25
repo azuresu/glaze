@@ -55,6 +55,14 @@ func new_scene(scene_name: String, parent: Node = null) -> Node:
 		return scene
 	return null
 
+## Returns property value defined in scene data. Returns the default value if property is not defined or scene does not exist.
+func get_scene_property(scene_name: String, prop_name: String, default: Variant) -> Variant:
+	if scene_name in scene_data:
+		var data: Dictionary = scene_data[scene_name]
+		if prop_name in data:
+			return data[prop_name]
+	return default
+
 ## Returns the first argument if it is a valid instance, otherwise returns the second argument.
 func validate(obj: Variant, dft: Variant = null) -> Variant:
 	return obj if is_instance_valid(obj) else dft
@@ -121,7 +129,8 @@ func move_vector3(from: Vector3, to: Vector3, speed: float, delta: float) -> Vec
 
 ## Frees children from parent.
 func free_children(parent: Node, filter:= func(ch): return true) -> void:
-	for ch in parent.get_children():
+	var children:= parent.get_children().duplicate()
+	for ch in children:
 		if filter.call(ch):
 			parent.remove_child(ch)
 			ch.queue_free()
