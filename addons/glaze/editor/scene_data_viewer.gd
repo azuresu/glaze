@@ -5,9 +5,8 @@ func _ready() -> void:
 	_update_table()
 
 func _update_table() -> void:
+	Glaze.free_children(%Table)
 	var filter_text: String = %Filter.text
-	for ch in %Table.get_children():
-		ch.free()
 	var props:= {}
 	for name in Glaze.scene_data:
 		if not filter_text or name.contains(filter_text):

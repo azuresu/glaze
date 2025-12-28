@@ -14,9 +14,9 @@ func _disable_plugin() -> void:
 
 func _enter_tree() -> void:
 	scene_data_viewer = preload("res://addons/glaze/editor/scene_data_viewer.tscn").instantiate()
-	add_control_to_bottom_panel(scene_data_viewer, "Scene Data")
+	add_control_to_bottom_panel(scene_data_viewer, "GLAZE scenes")
 	translation_viewer = preload("res://addons/glaze/editor/translation_viewer.tscn").instantiate()
-	add_control_to_bottom_panel(translation_viewer, "Translation")
+	add_control_to_bottom_panel(translation_viewer, "GLAZE translation")
 
 func _exit_tree() -> void:
 	remove_control_from_bottom_panel(scene_data_viewer)
