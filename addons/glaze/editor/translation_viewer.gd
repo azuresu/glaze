@@ -3,21 +3,17 @@ extends Control
 
 var language_checkboxes: Dictionary[String, CheckBox]
 
-var loaded_bundles: Dictionary[String, Dictionary]
-var loaded_keys: Dictionary
-
 func _ready() -> void:
 	_update_table()
 
-func _update_table() -> void:
+func _update_table(update_csv:= false) -> void:
 	Glaze.free_children(%Table)
-	loaded_bundles.clear()
-	loaded_keys.clear()
+	var bundles: Dictionary[String, Dictionary]
+	var keys: Dictionary
 	for trans_file in Glaze.translation_files:
 		if trans_file is String and FileAccess.file_exists(trans_file) and trans_file.ends_with(".csv"):
-			trans_file = trans_file.substr(0, trans_file.length() - 4)
 			var file_dir:= "."
-			var file_name: String = trans_file
+			var file_name: String = trans_file.substr(0, trans_file.length() - 4)
 			var sep:= file_name.rfind("/")
 			if sep == -1:
 				sep = file_name.rfind("\\")
@@ -37,8 +33,24 @@ func _update_table() -> void:
 					var props: Dictionary
 					_load_properties(prop_file, props)
 					for k in props:
-						loaded_keys[k] = 1
-					loaded_bundles[lang] = props
+						keys[k] = 1
+					bundles[lang] = props
+			if update_csv and Glaze.translation_languages:
+				var lang: String = Glaze.translation_languages[0]
+				var sorted_keys: Array[String]
+				for k in bundles[lang]:
+					sorted_keys.append(k)
+				sorted_keys.sort_custom(func(s1, s2): return s1.naturalnocasecmp_to(s2) < 0)
+				var csv_file = FileAccess.open(trans_file, FileAccess.WRITE)
+				var head:= "keys"
+				for k in bundles:
+					head += ",%s" % k
+				csv_file.store_line(head)
+				for k in bundles[lang]:
+					var ln = k
+					for k2 in bundles:
+						ln = _append_csv_line(ln, k, bundles[k2])
+					csv_file.store_line(ln)
 
 	var cols:= 1
 	for lang in language_checkboxes:
@@ -49,15 +61,15 @@ func _update_table() -> void:
 	var filter_text: String = %Filter.text
 	var key_count: Dictionary[String, int]
 	%Table.add_table_cell("KEY", true)
-	for lang in loaded_bundles:
+	for lang in bundles:
 		key_count[lang] = 0
 		if language_checkboxes[lang].button_pressed:
 			%Table.add_table_cell(lang, true)
-	for k: String in loaded_keys:
+	for k: String in keys:
 		if not filter_text or k.contains(filter_text):
 			%Table.add_table_cell(k)
-			for lang in loaded_bundles:
-				var props = loaded_bundles[lang]
+			for lang in bundles:
+				var props = bundles[lang]
 				if k in props:
 					key_count[lang] += 1
 				if language_checkboxes[lang].button_pressed:
@@ -79,6 +91,22 @@ func _load_properties(filename: String, props: Dictionary):
 			props[key] = str
 	read_file.close()
 
+func _append_csv_line(line: String, key: String, strings: Dictionary) -> String:
+	var str:= key
+	if key in strings:
+		str = strings[key]
+	var new_str:= ""
+	var words:= str.split("\"")
+	for w in words:
+		if new_str.length():
+			new_str += "\"\"%s" % w
+		else:
+			new_str += w
+	if new_str.find(",") >= 0:
+		new_str = "\"%s\"" % new_str
+	line += ",%s" % new_str
+	return line
+
 func _on_draw() -> void:
 	Glaze.load_config()
 	_update_table()
@@ -87,4 +115,4 @@ func _on_filter_text_changed(new_text: String) -> void:
 	_update_table()
 
 func _on_update_csv_button_pressed() -> void:
-	pass # Replace with function body.
+	_update_table(true)
