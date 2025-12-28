@@ -16,6 +16,8 @@ var log_rich_text: bool
 var scene_data_files: Array
 var scene_data: Dictionary
 var scene_data_allow_builtin_types: bool
+var translation_languages: Array
+var translation_files: Array
 
 var _builtin_parsers: Array[Parser]
 var _packed_scenes: Dictionary[String, Resource]
@@ -294,6 +296,13 @@ func load_config() -> void:
 			log_info("Loaded scenes: %s", scene_data.size())
 		else:
 			log_warn("Missing scene data files in configuration.")
+
+		if "translation_languages" in config:
+			translation_languages = config["translation_languages"] as Array
+
+		if "translation_files" in config:
+			translation_files = config["translation_files"] as Array
+
 	else:
 		log_warn("Missing configuration file: %s", _CONFIG_FILE)
 

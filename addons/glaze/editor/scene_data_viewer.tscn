@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cxwd1x432f8gd"]
+[gd_scene load_steps=3 format=3 uid="uid://cxwd1x432f8gd"]
 
 [ext_resource type="Script" uid="uid://cukdbc5c15jia" path="res://addons/glaze/editor/scene_data_viewer.gd" id="1_rosgp"]
+[ext_resource type="PackedScene" uid="uid://dlrpdxbj6jml1" path="res://addons/glaze/editor/grid_table.tscn" id="2_wrbwr"]
 
 [node name="SceneDataViewer" type="Control"]
 layout_mode = 3
@@ -27,19 +28,17 @@ placeholder_text = "Enter text to filter..."
 [node name="Result" type="Label" parent="VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Found 62 result(s)"
+text = "Found 35 result(s)"
 horizontal_alignment = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Table" type="GridContainer" parent="VBoxContainer/ScrollContainer"]
+[node name="Table" parent="VBoxContainer/ScrollContainer" instance=ExtResource("2_wrbwr")]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/h_separation = 0
-theme_override_constants/v_separation = 0
-columns = 14
+columns = 11
 
 [connection signal="draw" from="." to="." method="_on_draw"]
 [connection signal="text_changed" from="VBoxContainer/Filter" to="." method="_on_filter_text_changed"]
