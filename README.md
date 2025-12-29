@@ -128,23 +128,55 @@ A simple implementation of state machine. Just another lovely wheel :)
 
 一个简单的状态机实现。就另一个可爱的轮子罢了：）
 
+## Tools in Godot editor
+
+Some tools are added into Godot editor once plugin is enabled.
+
+一旦插件启用后，一些工具界面会被加入Godot编辑器。
+
+### Scene data viewer
+
+A new tab called 'GLAZE scenes' will be available on bottom area. It lists all scene data.
+
+一个新的标签'GLAZE scenes'会在底部出现。所有的场景数据都会被列在这里。
+
+### Translation viewer
+
+A new tab called 'GLAZE translation' will be available on bottom area. It lists all translations. You can also update all translation CSV files in one click here.
+
+一个新的标签'GLAZE translation'会在底部出现。所有的翻译数据都会被列在这里。你也可以在这里一键更新所有的翻译CSV文件。
+
 ## Setup
 
+There are two ways to enable the plugin: copy addons or use symlink.
+
+有两种方法可以启用插件：拷贝addons目录或者使用符号链接。
+
 ### Copy addons
+
 Copy directory 'addons' to your project.
 
+拷贝目录'addons'到你的项目里。
+
 ### Use symlink
+
 Run following command with administrator privilege:
+
+使用管理员权限运行以下命令：
 
 `mklink /D <project_dir>\addons\glaze <glaze_dir>\addons\glaze`
 
 *Note if you clone the plugin repository and use symlink in your project, changes will be made to some plugin scenes as they are marked @tool.
-Therefore you will have uncommited changes in Git.*
+Therefore you will have uncommited changes in Git repository.*
+
+*要注意的如果你的插件目录是直接从插件代码库克隆而来，在使用过程中可能会有修改被应用于插件内的部分标记为@tool的场景，请保持这些本地修改而不必提交至Git仓库。*
 
 ### Add configuration file (optional but highly recommended)
 
-Once installed plugin, you may create a JSON file under your project directory and named it 'glaze.json'.
-This is the configuration this plugin reads whenever game starts.
+Once plugin is installed and enabled, you may create a JSON file under your project directory and named it 'glaze.json'.
+This is the configuration this plugin reads whenever game starts. So you need to export this file as well.
+
+一旦插件安装完成并启用，你可以在你的项目根目录下创建一个名为'glaze.json'的文件，这是插件的总配置文件，会在游戏启动时读取。所以这个文件也需要被导出在运行包里。
 
 | Property | Description | Default value |
 | --- | --- | --- |
@@ -152,6 +184,8 @@ This is the configuration this plugin reads whenever game starts.
 | log_rich_text | Log message in rich text (different colors for different levels) | true |
 | scene_data_allow_builtin_types | Allow built-in types configured in scene data file | true |
 | scene_data_files | A list of scene data files | [] |
+| translation_languages | A list of translation languages, like en, zh, etc. | [] |
+| translation_files | A list of translation CSV files | [] |
 
 ## Scene data
 You can configure any property accessible to the scene. However there are some pre-defined properties will be used by plugin:
