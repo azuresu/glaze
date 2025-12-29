@@ -26,15 +26,33 @@ Some important functions as following:
 
 This function provides useful features for you to create new instance of scenes. At minimum, you got:
 	
-该方法为创建场景实例提供了更多的有用特性，至少有一下这些：
+该方法为创建场景实例提供了更多的有用特性，至少有以下这些：
 
 - Cache: Glaze automatically caches all packed scenes so you don't have to store them manually;
 
-缓存：Glaze自动缓存所有的序列化场景，你不再需要自己做缓存；
+- 缓存：Glaze自动缓存所有的序列化场景，你不再需要自己做缓存；
 
 - Simplicity: You can create new scene instance and add it into parent with single-line script.
 
-简单：你可以用一行代码创建场景实例并添加进父场景；
+- 简单：你可以用一行代码创建场景实例并添加进父场景；
+
+For example, the following three lines:
+
+例如，以下的三行代码：
+
+```
+var packed_scene = load("res://scenes/object.tscn")
+var new_object = packed_scene.instantiate()
+parent_node.add_child(new_object)
+```
+
+Can be reduced to one line:
+
+可以被缩减为一行：
+
+```
+Glaze.new_scene("res://scenes/object.tscn", parent_node)
+```
 
 At maximum, you get following advantages if you define scenes in scene data file:
 
@@ -42,19 +60,19 @@ At maximum, you get following advantages if you define scenes in scene data file
 
 - Scene can be referred with short name which is immune to directory change (you have to change scene_path in the data file of course but no change required in script);
 
-使用较短的名称来指定场景，这样就不需要在修改目录结构时改动代码（但仍旧需要在场景数据文件中修改scene_path）；
+- 使用较短的名称来指定场景，这样就不需要在修改目录结构时改动代码（但仍旧需要在场景数据文件中修改scene_path）；
 
 - Data can be centralized into data files so you can use your preferred text editor to make the change;
 
-数据可以被集中在文件中，让你方便地使用任何你喜欢的文本编辑器来编辑；
+- 数据可以被集中在文件中，让你方便地使用任何你喜欢的文本编辑器来编辑；
 
 - Data can be inherited from another to reduce duplication therefore mistakes of inconsistent data;
 
-数据可以继承，以此减少重复数据和错误；
+- 数据可以继承，以此减少重复数据和错误；
 
 - Plugin has Scene Data Viewer enabled in Godot IDE bottom panel which is a great way to view and search data.
 
-插件在集成开发环境的下方增加了场景数据查看器，可以方便查看并搜索。
+- 插件在集成开发环境的下方增加了场景数据查看器，可以方便查看并搜索。
 
 ### Version
 
@@ -96,6 +114,32 @@ A unidirectional binding which updates property automatically with configured so
 
 赋值节点提供了从数据源到目标属性的单向数据绑定。加入场景树后，请以需要绑定的属性名称来命名该节点。
 
+For example, we have a scene:
+
+例如，有如下的场景：
+
+```
+UI (source: ui.gds)
+  - Label
+    - text (source var: label_text)
+    - visible (source var: label_visible)
+```
+
+In ui.gds, we define two members to provide binding data:
+
+在ui.gds代码里，定义两个变量来提供被绑定的数据：
+
+```
+var label_text: String:
+	get: return "something"
+var label_visible: bool:
+	get: return true
+```
+
+As a result, the label text and visibility is controlled by binding data in runtime.
+
+如此一来，在运行时标签的文字和可见性就由被绑定的数据来控制。
+
 ### Interval
 
 A timer calls a func on the parent node periodically. After being added into parent, name it with the func name you want to call.
@@ -108,19 +152,19 @@ Comparing with Godot bulti-in timer, it has advantages:
 
 - Stable interval when it is small;
 
-稳定的间隔时间，即使这个时间很短；
+- 稳定的间隔时间，即使这个时间很短；
 
 - Easy to config: name it with called func;
 
-方便使用：直接以被调用的函数名称来命名；
+- 方便使用：直接以被调用的函数名称来命名；
 
 - Flexiable interval config with ratio in runtime;
 
-通过速率参数可灵活控制运行期的间隔时间；
+- 通过速率参数可灵活控制运行期的间隔时间；
 
 - Random start-up to reduce clog when large amount of Intervals added into scene tree (for example when game is loaded).
 
-随机的启动时间用来在大量间隔器同时加入场景树时减少卡顿（比如读取游戏存盘时）。
+- 随机的启动时间用来在大量间隔器同时加入场景树时减少卡顿（比如读取游戏存盘时）。
 
 ### StateMachine and State
 
@@ -169,7 +213,7 @@ Run following command with administrator privilege:
 *Note if you clone the plugin repository and use symlink in your project, changes will be made to some plugin scenes as they are marked @tool.
 Therefore you will have uncommited changes in Git repository.*
 
-*要注意的如果你的插件目录是直接从插件代码库克隆而来，在使用过程中可能会有修改被应用于插件内的部分标记为@tool的场景，请保持这些本地修改而不必提交至Git仓库。*
+*要注意的是如果你的插件目录是直接从插件代码库克隆而来，在使用过程中可能会有修改被应用于插件内的部分标记为@tool的场景，请保持这些本地修改而不必提交至Git仓库。*
 
 ### Add configuration file (optional but highly recommended)
 
