@@ -8,10 +8,11 @@ func _ready() -> void:
 
 func _update_table(update_csv:= false) -> void:
 	Glaze.free_children(%Table)
-	var bundles: Dictionary[String, Dictionary]
-	var keys: Dictionary
+	var merged_bundles: Dictionary[String, Dictionary]
+	var merged_keys: Dictionary[String, int]
 	for trans_file in Glaze.translation_files:
 		if trans_file is String and FileAccess.file_exists(trans_file) and trans_file.ends_with(".csv"):
+			var bundles: Dictionary[String, Dictionary]
 			var file_dir:= "."
 			var file_name: String = trans_file.substr(0, trans_file.length() - 4)
 			var sep:= file_name.rfind("/")
@@ -33,8 +34,11 @@ func _update_table(update_csv:= false) -> void:
 					var props: Dictionary
 					_load_properties(prop_file, props)
 					for k in props:
-						keys[k] = 1
+						merged_keys[k] = 1
 					bundles[lang] = props
+					if not lang in merged_bundles:
+						merged_bundles[lang] = {}
+					merged_bundles[lang].merge(props)
 			if update_csv and Glaze.translation_languages:
 				var lang: String = Glaze.translation_languages[0]
 				var sorted_keys: Array[String]
@@ -61,22 +65,22 @@ func _update_table(update_csv:= false) -> void:
 	var filter_text: String = %Filter.text
 	var key_count: Dictionary[String, int]
 	%Table.add_table_cell("KEY", true)
-	for lang in bundles:
+	for lang in merged_bundles:
 		key_count[lang] = 0
 		if language_checkboxes[lang].button_pressed:
 			%Table.add_table_cell(lang, true)
-	for k: String in keys:
+	for k: String in merged_keys:
 		if not filter_text or k.contains(filter_text):
 			%Table.add_table_cell(k)
-			for lang in bundles:
-				var props = bundles[lang]
+			for lang in merged_bundles:
+				var props = merged_bundles[lang]
 				if k in props:
 					key_count[lang] += 1
 				if language_checkboxes[lang].button_pressed:
 					if k in props:
 						%Table.add_table_cell(props[k])
 					else:
-						%Table.add_table_cell()
+						%Table.add_table_cell("")
 	for lang in key_count:
 		language_checkboxes[lang].text = "%s(%d)" % [lang, key_count[lang]]
 
