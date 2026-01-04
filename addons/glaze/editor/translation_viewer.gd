@@ -10,6 +10,7 @@ func _update_table(update_csv:= false) -> void:
 	Glaze.free_children(%Table)
 	var merged_bundles: Dictionary[String, Dictionary]
 	var merged_keys: Dictionary[String, int]
+	var files_to_reimport: PackedStringArray
 	for trans_file in Glaze.translation_files:
 		if trans_file is String and FileAccess.file_exists(trans_file) and trans_file.ends_with(".csv"):
 			var bundles: Dictionary[String, Dictionary]
@@ -55,6 +56,9 @@ func _update_table(update_csv:= false) -> void:
 					for k2 in bundles:
 						ln = _append_csv_line(ln, k, bundles[k2])
 					csv_file.store_line(ln)
+				files_to_reimport.append(trans_file)
+	if files_to_reimport:
+		EditorInterface.get_resource_filesystem().reimport_files(files_to_reimport)
 
 	var cols:= 1
 	for lang in language_checkboxes:
