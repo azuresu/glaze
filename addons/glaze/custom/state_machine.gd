@@ -38,6 +38,9 @@ func _physics_process(delta: float) -> void:
 
 func _set_current_state(state_name: String, params:= {}) -> void:
 	if state_name in states:
+		if current_state and current_state.name == state_name:
+			if not current_state.reset_when_transition_to_self:
+				return
 		if current_state:
 			current_state._exit()
 			state_exited.emit(current_state)

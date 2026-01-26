@@ -3,6 +3,8 @@
 ## Put this node under StateMachine node.
 class_name State extends Node
 
+@export var reset_when_transition_to_self:= false
+
 var machine: StateMachine
 var update_time: float
 
