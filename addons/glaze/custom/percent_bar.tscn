@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3 uid="uid://bw8i1ohgabm7j"]
+
+[ext_resource type="Script" uid="uid://cqalf2y24uh7x" path="res://addons/glaze/custom/percent_bar.gd" id="1_7y8wk"]
+[ext_resource type="Script" uid="uid://46l7q0rcq4wj" path="res://addons/glaze/custom/evaluate.gd" id="2_yklj2"]
+
+[node name="PercentBar" type="Control" node_paths=PackedStringArray("bar", "back")]
+custom_minimum_size = Vector2(200, 15)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 200.0
+offset_bottom = 10.0
+script = ExtResource("1_7y8wk")
+bar = NodePath("Bar")
+back = NodePath("Back")
+
+[node name="Back" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Bar" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 100.0
+offset_bottom = 13.0
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 3.0
+offset_right = 43.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(1, 0, 1, 1)
+theme_override_font_sizes/font_size = 9
+
+[node name="text" type="Node" parent="Label" node_paths=PackedStringArray("source")]
+script = ExtResource("2_yklj2")
+source = NodePath("../..")
+source_var = "text"
+metadata/_custom_type_script = "uid://46l7q0rcq4wj"
