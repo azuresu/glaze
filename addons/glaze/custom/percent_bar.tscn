@@ -37,11 +37,16 @@ layout_mode = 0
 offset_left = 3.0
 offset_right = 43.0
 offset_bottom = 23.0
-theme_override_colors/font_color = Color(1, 0, 1, 1)
 theme_override_font_sizes/font_size = 9
 
 [node name="text" type="Node" parent="Label" node_paths=PackedStringArray("source")]
 script = ExtResource("2_yklj2")
 source = NodePath("../..")
 source_var = "text"
+metadata/_custom_type_script = "uid://46l7q0rcq4wj"
+
+[node name="modulate" type="Node" parent="Label" node_paths=PackedStringArray("source")]
+script = ExtResource("2_yklj2")
+source = NodePath("../..")
+source_var = "text_color"
 metadata/_custom_type_script = "uid://46l7q0rcq4wj"

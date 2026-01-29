@@ -8,6 +8,8 @@ class_name PercentBar extends Control
 @export var bar_color:= Color.WHITE
 @export var back_color:= Color.BLACK
 @export var text: String
+@export var text_color:= Color.PURPLE
+
 @export var bar: ColorRect
 @export var back: ColorRect
 
