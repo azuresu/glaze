@@ -24,7 +24,7 @@ var _packed_scenes: Dictionary[String, Resource]
 
 ## Creates a new scene and adds it to parent when provided.
 ## The new-created scene is an instance of cached packed scene which is defined in scene file.
-func new_scene(scene_name: String, parent: Node = null) -> Node:
+func new_scene(scene_name: String, parent: Node = null, params:= {}) -> Node:
 	if not scene_name in _packed_scenes:
 		var scene_path: String
 		if scene_name in scene_data:
@@ -51,6 +51,10 @@ func new_scene(scene_name: String, parent: Node = null) -> Node:
 		scene.set_meta("scene_name", scene_name)
 		if "scene_name" in scene:
 			scene["scene_name"] = scene_name
+		# Copy params into scene.
+		for p in params:
+			if p in scene:
+				scene[p] = params[p]
 		# Add to parent.
 		if parent:
 			parent.add_child(scene)
