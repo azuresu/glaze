@@ -110,9 +110,9 @@ func _set_invis() -> void:
 
 ### Evaluate
 
-A unidirectional binding which updates property automatically with configured source. After being added into parent, name it with the property name you want to set.
+A bidirectional binding which updates property automatically with configured source. After being added into parent, name it with the property name you want to set.
 
-赋值节点提供了从数据源到目标属性的单向数据绑定。加入场景树后，请以需要绑定的属性名称来命名该节点。
+赋值节点提供了从数据源到目标属性的双向数据绑定。加入场景树后，请以需要绑定的属性名称来命名该节点。
 
 For example, we have a scene:
 
@@ -139,6 +139,10 @@ var label_visible: bool:
 As a result, the label text and visibility is controlled by binding data in runtime.
 
 如此一来，在运行时标签的文字和可见性就由被绑定的数据来控制。
+
+When you need to set value back to the source variable, enable bidirectional flag. Easy!
+
+当你需要把数据从目标属性写回数据源，请打开bidirectional选项。超容易的吧！
 
 ### Interval
 
