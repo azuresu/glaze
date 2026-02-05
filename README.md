@@ -144,6 +144,10 @@ When you need to set value back to the source variable, enable bidirectional fla
 
 当你需要把数据从目标属性写回数据源，请打开bidirectional选项。超容易的吧！
 
+If source is not specified, scene owner will be used in default.
+
+如果没有指定数据源，默认使用场景owner。
+
 ### Interval
 
 A timer calls a func on the parent node periodically. After being added into parent, name it with the func name you want to call.
