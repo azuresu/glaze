@@ -200,6 +200,8 @@ A new tab called 'GLAZE translation' will be available on bottom area. It lists 
 
 一个新的标签'GLAZE translation'会在底部出现。所有的翻译数据都会被列在这里。你也可以在这里一键更新所有的翻译CSV文件。
 
+![Screenshot](docs/glaze_translation_tab.png)
+
 ## Setup
 
 There are two ways to enable the plugin: copy addons or use symlink.
