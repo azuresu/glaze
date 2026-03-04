@@ -192,7 +192,7 @@ A new tab called 'GLAZE scenes' will be available on bottom area. It lists all s
 
 一个新的标签'GLAZE scenes'会在底部出现。所有的场景数据都会被列在这里。
 
-![Screenshot](https://github.com/655389f5-bfe2-4ec1-bff0-a46b23951e81)
+![Screenshot](docs/glaze_scenes_tab.png)
 
 ### Translation viewer
 
