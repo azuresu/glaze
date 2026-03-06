@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cj2ly1rirnevp"
-path="res://.godot/imported/quick_button.png-f4fa011d3b187bb15e0984385b6a3b0b.ctex"
+uid="uid://bou7453w7d8pl"
+path="res://.godot/imported/sigcall.png-83f1c1ad19b0a2263e58814da6f7f09c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/glaze/custom/quick_button.png"
-dest_files=["res://.godot/imported/quick_button.png-f4fa011d3b187bb15e0984385b6a3b0b.ctex"]
+source_file="res://addons/glaze/custom/sigcall.png"
+dest_files=["res://.godot/imported/sigcall.png-83f1c1ad19b0a2263e58814da6f7f09c.ctex"]
 
 [params]
 
