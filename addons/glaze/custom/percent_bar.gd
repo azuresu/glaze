@@ -17,4 +17,5 @@ func _process(delta: float) -> void:
 	back.color = back_color
 	back.size = size
 	bar.color = bar_color
+	bar.position = Vector2(bar_padding, bar_padding)
 	bar.size = Vector2((size.x - bar_padding * 2) * clampf(percent, 0, 1), size.y - bar_padding * 2)
