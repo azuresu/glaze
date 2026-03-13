@@ -176,9 +176,13 @@ Comparing with Godot bulti-in timer, it has advantages:
 
 ### Press
 
-A node which connects a signal with a function named by its own name. It is mostly used for button as the default signal is 'pressed'.
+A button which calls a function named by its own name when pressed.
 
-一个用于将信号和同名函数连接的节点。由于主要用于按钮，默认的信号是'pressed'。
+一个被按下时会调用同名函数的按钮。
+
+Yeah, I am too lazy to connect 'pressed' signal.
+
+嗯，我连连接'pressed'信号都懒得去做了。
 
 ### StateMachine and State
 

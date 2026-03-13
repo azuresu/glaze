@@ -68,18 +68,16 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="Button" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+[node name="_click_me" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "CLICKS:"
+script = ExtResource("5_tefeu")
+metadata/_custom_type_script = "uid://cxyfayps4umur"
 
-[node name="text" type="Node" parent="CanvasLayer/MarginContainer/VBoxContainer/Button"]
+[node name="text" type="Node" parent="CanvasLayer/MarginContainer/VBoxContainer/_click_me"]
 script = ExtResource("2_0wfyh")
 source_var = "click_text"
 metadata/_custom_type_script = "uid://46l7q0rcq4wj"
-
-[node name="_click_me" type="Node" parent="CanvasLayer/MarginContainer/VBoxContainer/Button"]
-script = ExtResource("5_tefeu")
-metadata/_custom_type_script = "uid://cxyfayps4umur"
 
 [node name="update_time" type="Node" parent="."]
 script = ExtResource("3_sugp2")
