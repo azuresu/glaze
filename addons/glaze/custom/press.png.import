@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bou7453w7d8pl"
-path="res://.godot/imported/sigcall.png-83f1c1ad19b0a2263e58814da6f7f09c.ctex"
+uid="uid://cd53l4wy36dsx"
+path="res://.godot/imported/press.png-ea44de4c3e84c23457294a4ad2024df8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/glaze/custom/sigcall.png"
-dest_files=["res://.godot/imported/sigcall.png-83f1c1ad19b0a2263e58814da6f7f09c.ctex"]
+source_file="res://addons/glaze/custom/press.png"
+dest_files=["res://.godot/imported/press.png-ea44de4c3e84c23457294a4ad2024df8.ctex"]
 
 [params]
 

@@ -174,11 +174,11 @@ Comparing with Godot bulti-in timer, it has advantages:
 
 - 随机的启动时间用来在大量间隔器同时加入场景树时减少卡顿（比如读取游戏存盘时）。
 
-### Sigcall
+### Press
 
-A node which connects a function with the signal named by its own name.
+A node which connects a signal with a function named by its own name. It is mostly used for button as the default signal is 'pressed'.
 
-一个用于将函数和同名信号连接的节点。
+一个用于将信号和同名函数连接的节点。由于主要用于按钮，默认的信号是'pressed'。
 
 ### StateMachine and State
 
