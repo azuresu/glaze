@@ -21,10 +21,11 @@ var translation_files: Array
 
 var _builtin_parsers: Array[Parser]
 var _packed_scenes: Dictionary[String, Resource]
+var _load_scenes_thread: Thread
+var _load_scenes_queue: Array[String]
 
-## Creates a new scene and adds it to parent when provided.
-## The new-created scene is an instance of cached packed scene which is defined in scene file.
-func new_scene(scene_name: String, parent: Node = null, params:= {}) -> Node:
+## Loads a scene resource, from cache if possible.
+func load_scene(scene_name: String) -> Resource:
 	if not scene_name in _packed_scenes:
 		var scene_path: String
 		if scene_name in scene_data:
@@ -40,8 +41,28 @@ func new_scene(scene_name: String, parent: Node = null, params:= {}) -> Node:
 			_packed_scenes[scene_name] = s
 		else:
 			log_error("Scene not found: %s", scene_path)
-	if scene_name in _packed_scenes:
-		var scene: Node = _packed_scenes[scene_name].instantiate()
+		return s
+	return _packed_scenes[scene_name]
+
+## Load multiple scenes in a new thread.
+## The second argument counter(index, success) is called for each loaded scene.
+func load_scenes_threaded(scene_names: Array[String], counter:= func(index: int, success: bool): pass) -> bool:
+	if not _load_scenes_thread or not _load_scenes_thread.is_alive():
+		_load_scenes_queue = scene_names
+		_load_scenes_thread = Thread.new()
+		_load_scenes_thread.start(func():
+			for i in _load_scenes_queue.size():
+				var success = true if load_scene(_load_scenes_queue[i]) else false
+				counter.call(i, success))
+		return true
+	return false
+
+## Creates a new scene and adds it to parent when provided.
+## The new-created scene is an instance of cached packed scene which is defined in scene file.
+func new_scene(scene_name: String, parent: Node = null, params:= {}) -> Node:
+	var s = load_scene(scene_name)
+	if s:
+		var scene: Node = s.instantiate()
 		# Copy data into scene.
 		if scene_name in scene_data:
 			var data: Dictionary = scene_data[scene_name]
@@ -297,7 +318,7 @@ func load_config() -> void:
 						log_debug("Scene data added: %s", scene_name)
 			for scene_name in scene_data:
 				_merge_derived_data(scene_name)
-			log_info("Loaded scenes: %s", scene_data.size())
+			log_info("Loaded scene data: %s", scene_data.size())
 		else:
 			log_warn("Missing scene data files in configuration.")
 
