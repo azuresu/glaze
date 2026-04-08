@@ -212,6 +212,12 @@ A new tab called 'GLAZE translation' will be available on bottom area. It lists 
 
 ![Screenshot](docs/glaze_translation_tab.png)
 
+### Search everywhere
+
+Press SHIFT twice, a window titled 'Search everywhere' will pop up and allow user search all files under project folder by name.
+
+连续按SHIFT键两次，一个标题为“Search everywhere”的窗口会弹出，允许用户通过文件名搜索项目文件夹下的所有文件。
+
 ## Setup
 
 There are two ways to enable the plugin: copy addons or use symlink.
