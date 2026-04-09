@@ -6,7 +6,7 @@
 oversampling_override = 1.0
 title = "GLAZE search everywhere"
 position = Vector2i(0, 36)
-size = Vector2i(600, 400)
+size = Vector2i(800, 600)
 visible = false
 script = ExtResource("1_0c1v3")
 
@@ -35,8 +35,24 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Addons" type="CheckButton" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "/addons"
+
+[node name="UID" type="CheckButton" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = ".uid"
+
 [connection signal="about_to_popup" from="." to="." method="_on_about_to_popup"]
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="focus_exited" from="." to="." method="_on_focus_exited"]
 [connection signal="gui_input" from="MarginContainer/VBoxContainer/Keyword" to="." method="_on_keyword_gui_input"]
 [connection signal="text_changed" from="MarginContainer/VBoxContainer/Keyword" to="." method="_on_keyword_text_changed"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainer/Addons" to="." method="_on_addons_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/HBoxContainer/UID" to="." method="_on_uid_toggled"]

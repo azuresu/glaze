@@ -218,6 +218,8 @@ Press SHIFT twice, a window titled 'Search everywhere' will pop up and allow use
 
 连续按SHIFT键两次，一个标题为“Search everywhere”的窗口会弹出，允许用户通过文件名搜索项目文件夹下的所有文件。
 
+![Screenshot](docs/glaze_search_everywhere.png)
+
 ## Setup
 
 There are two ways to enable the plugin: copy addons or use symlink.

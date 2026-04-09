@@ -11,17 +11,6 @@ func _on_about_to_popup() -> void:
 	%Keyword.grab_focus()
 	%Keyword.select(0, %Keyword.text.length())
 
-func _on_keyword_text_changed(new_text: String) -> void:
-	%Result.clear()
-	if new_text:
-		var files: Array[File]
-		_list_files("", files)
-		for f in files:
-			if f.name.containsn(new_text):
-				%Result.add_item("%s/%s" % [f.path, f.name])
-		if %Result.item_count:
-			%Result.select(0)
-
 func _on_keyword_gui_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and %Result.get_selected_items():
 		var sel: int = %Result.get_selected_items()[0]
@@ -39,6 +28,24 @@ func _on_keyword_gui_input(event: InputEvent) -> void:
 					%Keyword.grab_focus()
 			KEY_ESCAPE:
 				hide()
+
+func _search() -> void:
+	%Result.clear()
+	var keyword: String = %Keyword.text
+	var addons: bool = %Addons.button_pressed
+	var uid: bool = %UID.button_pressed
+	if keyword:
+		var files: Array[File]
+		_list_files("", files)
+		for f in files:
+			if f.path.begins_with("/addons/") and not addons:
+				continue
+			if f.name.ends_with(".uid") and not uid:
+				continue
+			if f.name.containsn(keyword):
+				%Result.add_item("%s/%s" % [f.path, f.name])
+		if %Result.item_count:
+			%Result.select(0)
 
 func _list_files(path: String, files: Array[File]) -> void:
 	var dir:= DirAccess.open("res://%s" % path)
@@ -64,6 +71,15 @@ func _open_file(path: String) -> void:
 		EditorInterface.set_main_screen_editor("Script")
 	else:
 		EditorInterface.edit_resource(load(path))
+
+func _on_keyword_text_changed(new_text: String) -> void:
+	_search()
+
+func _on_addons_toggled(toggled_on: bool) -> void:
+	_search()
+
+func _on_uid_toggled(toggled_on: bool) -> void:
+	_search()
 
 class File:
 	
