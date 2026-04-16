@@ -34,27 +34,34 @@ func _search() -> void:
 	var keyword: String = %Keyword.text
 	var addons: bool = %Addons.button_pressed
 	var uid: bool = %UID.button_pressed
+	var import: bool = %Import.button_pressed
 	if keyword:
 		var files: Array[File]
 		_list_files("", files)
+		for i in range(files.size() - 1, -1, -1):
+			var f:= files[i]
+			if f.dir_path.begins_with("/addons/") and not addons:
+				files.remove_at(i)
+			elif f.name.ends_with(".uid") and not uid:
+				files.remove_at(i)
+			elif f.name.ends_with(".import") and not import:
+				files.remove_at(i)
+			elif not f.name.containsn(keyword):
+				files.remove_at(i)
+		files.sort_custom(func(f1, f2) -> bool: return f1.full_path.length() < f2.full_path.length())
 		for f in files:
-			if f.path.begins_with("/addons/") and not addons:
-				continue
-			if f.name.ends_with(".uid") and not uid:
-				continue
-			if f.name.containsn(keyword):
-				%Result.add_item("%s/%s" % [f.path, f.name])
+			%Result.add_item(f.full_path)
 		if %Result.item_count:
 			%Result.select(0)
 
-func _list_files(path: String, files: Array[File]) -> void:
-	var dir:= DirAccess.open("res://%s" % path)
+func _list_files(dir_path: String, files: Array[File]) -> void:
+	var dir:= DirAccess.open("res://%s" % dir_path)
 	if dir:
 		for f in dir.get_files():
-			files.append(File.new(path, f))
-		for sub in dir.get_directories():
-			if not sub.begins_with("."):
-				_list_files("%s/%s" % [path, sub], files)
+			files.append(File.new(dir_path, f))
+		for sub_path in dir.get_directories():
+			if not sub_path.begins_with("."):
+				_list_files("%s/%s" % [dir_path, sub_path], files)
 
 func _open_file(path: String) -> void:
 	if path.ends_with(".tscn"):
@@ -81,11 +88,16 @@ func _on_addons_toggled(toggled_on: bool) -> void:
 func _on_uid_toggled(toggled_on: bool) -> void:
 	_search()
 
+func _on_import_toggled(toggled_on: bool) -> void:
+	_search()
+
 class File:
 	
-	var path: String
+	var dir_path: String
 	var name: String
+	var full_path: String:
+		get: return "%s/%s" % [dir_path, name]
 
-	func _init(path: String, name: String) -> void:
-		self.path = path
+	func _init(dir_path: String, name: String) -> void:
+		self.dir_path = dir_path
 		self.name = name
