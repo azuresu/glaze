@@ -17,6 +17,8 @@ func save_to_file(filename: String) -> bool:
 	var file:= FileAccess.open(filename, FileAccess.WRITE)
 	var json:= { "major": major, "minor": minor, "patch": patch, "build": build }
 	file.store_line(JSON.stringify(json))
+	file.flush()
+	file.close()
 	return true
 
 func equals(v: Version) -> bool:
