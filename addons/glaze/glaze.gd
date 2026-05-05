@@ -240,41 +240,21 @@ func format_builtin_types(value: Variant) -> Variant:
 
 ## Loads JSON as dictionary from file.
 func load_json_as_dict(filename: String, parse_builtin_types:= false) -> Dictionary:
-	var json = JSON.new()
-	var file = FileAccess.open(filename, FileAccess.READ)
-	if file:
-		var error = json.parse(file.get_as_text())
-		if not error:
-			if json.data is Dictionary:
-				if parse_builtin_types:
-					parse_builtin_types(json.data)
-				return json.data
-			else:
-				log_error("JSON is not a dictionary in json file: %s", filename)
-		else:
-			log_error("Error in parsing json file: %s", filename)
-	else:
-		log_error("File not found: %s", filename)
-	return {}
+	var dict:= Util.load_json_as_dict(filename, func(error):
+		log_error(error)
+		return {})
+	if dict and parse_builtin_types:
+		parse_builtin_types(dict)
+	return dict
 
 ## Loads JSON as array from file.
 func load_json_as_array(filename: String, parse_builtin_types:= false) -> Array:
-	var json = JSON.new()
-	var file = FileAccess.open(filename, FileAccess.READ)
-	if file:
-		var error = json.parse(file.get_as_text())
-		if not error:
-			if json.data is Array:
-				if parse_builtin_types:
-					parse_builtin_types(json.data)
-				return json.data
-			else:
-				log_error("JSON is not an array in json file: %s", filename)
-		else:
-			log_error("Error in parsing json file: %s", filename)
-	else:
-		log_error("File not found: %s", filename)
-	return []
+	var array:= Util.load_json_as_array(filename, func(error):
+		log_error(error)
+		return [])
+	if array and parse_builtin_types:
+		parse_builtin_types(array)
+	return array
 
 func load_config() -> void:
 	log_info("Loading configuration: %s", _CONFIG_FILE)
