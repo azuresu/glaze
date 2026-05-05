@@ -1,5 +1,7 @@
 @tool
-extends Window
+class_name SearchEverywhere extends Window
+
+static var item_scene = preload("res://addons/glaze/editor/search_everywhere_item.tscn")
 
 func _on_close_requested() -> void:
 	hide()
@@ -12,25 +14,25 @@ func _on_about_to_popup() -> void:
 	%Keyword.select(0, %Keyword.text.length())
 
 func _on_keyword_gui_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and %Result.get_selected_items():
-		var sel: int = %Result.get_selected_items()[0]
-		match event.keycode:
-			KEY_ENTER:
-				_open_file("res://%s" % %Result.get_item_text(sel))
-				hide()
-			KEY_UP:
-				if sel > 0:
-					%Result.select(sel - 1)
+	if event is InputEventKey and event.pressed:
+		var file:= _get_selected_file()
+		if file:
+			match event.keycode:
+				KEY_ENTER:
+					_open_file("res://%s" % file.full_path)
+					hide()
+				KEY_UP:
+					_move_select_result(-1)
 					%Keyword.grab_focus()
-			KEY_DOWN:
-				if sel < %Result.item_count - 1:
-					%Result.select(sel + 1)
+				KEY_DOWN:
+					_move_select_result(1)
 					%Keyword.grab_focus()
-			KEY_ESCAPE:
-				hide()
+				KEY_ESCAPE:
+					hide()
 
 func _search() -> void:
-	%Result.clear()
+	for ch in %ResultList.get_children():
+		ch.free()
 	var keyword: String = %Keyword.text
 	var addons: bool = %Addons.button_pressed
 	var uid: bool = %UID.button_pressed
@@ -50,9 +52,30 @@ func _search() -> void:
 				files.remove_at(i)
 		files.sort_custom(func(f1, f2) -> bool: return f1.full_path.length() < f2.full_path.length())
 		for f in files:
-			%Result.add_item(f.full_path)
-		if %Result.item_count:
-			%Result.select(0)
+			var item = item_scene.instantiate()
+			item.init_item(keyword, f, self)
+			%ResultList.add_child(item)
+		_select_result(0)
+
+func _get_selected_file() -> File:
+	for ch in %ResultList.get_children():
+		if ch.selected:
+			return ch.file
+	return null
+
+func _select_result(index: int) -> void:
+	if index >= 0 and index < %ResultList.get_child_count():
+		for i in %ResultList.get_child_count():
+			%ResultList.get_child(i).selected = i == index
+
+func _move_select_result(offset: int) -> void:
+	for i in %ResultList.get_child_count():
+		if %ResultList.get_child(i).selected:
+			if offset < 0:
+				_select_result(i - 1)
+			elif offset > 0:
+				_select_result(i + 1)
+			break
 
 func _list_files(dir_path: String, files: Array[File]) -> void:
 	var dir:= DirAccess.open("res://%s" % dir_path)

@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=3 uid="uid://d4ll3v43lp4b0"]
+
+[ext_resource type="Script" uid="uid://cgbeussgtyld5" path="res://addons/glaze/editor/search_everywhere_item.gd" id="1_8lgot"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2nk70"]
+resource_local_to_scene = true
+bg_color = Color(0, 0, 0, 0)
+border_width_bottom = 1
+border_color = Color(0.23392555, 0.23392546, 0.23392531, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2nk70"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8lgot"]
+
+[node name="SearchEverywhereItem" type="PanelContainer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 55.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_2nk70")
+script = ExtResource("1_8lgot")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = 5
+
+[node name="IconRect" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+expand_mode = 5
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_constants/separation = 0
+
+[node name="FileNameLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_2nk70")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8lgot")
+bbcode_enabled = true
+text = "filename"
+fit_content = true
+
+[node name="DirPathLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.60933006, 0.6093301, 0.60933006, 1)
+theme_override_font_sizes/font_size = 14
+text = "path"
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
