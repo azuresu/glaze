@@ -10,7 +10,8 @@ func _init() -> void:
 	if config:
 		if "version_file" in config:
 			var version_file = config.get("version_file")
-			var version:= Version.load_from_file(version_file)
+			var version:= Version.new()
+			version.load_from_file(version_file)
 			if version:
 				version.build += 1
 				version.save_to_file(version_file)

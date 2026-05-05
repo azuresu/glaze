@@ -6,12 +6,26 @@ var patch: int
 var build: int
 
 func _to_string() -> String:
-	return as_string()
+	return format()
 
-func as_string(includes_build:= true) -> String:
+func format(includes_build:= true) -> String:
 	if includes_build:
 		return "%s.%s.%s.%s" % [major, minor, patch, build]
 	return "%s.%s.%s" % [major, minor, patch]
+
+func parse(s: String) -> bool:
+	if s:
+		var parts:= s.split(".")
+		if parts.size() > 0:
+			major = int(parts[0])
+		if parts.size() > 1:
+			minor = int(parts[1])
+		if parts.size() > 2:
+			patch = int(parts[2])
+		if parts.size() > 3:
+			build = int(parts[3])
+		return true
+	return false
 
 func save_to_file(filename: String) -> bool:
 	var file:= FileAccess.open(filename, FileAccess.WRITE)
@@ -20,6 +34,20 @@ func save_to_file(filename: String) -> bool:
 	file.flush()
 	file.close()
 	return true
+
+func load_from_file(filename: String) -> bool:
+	var dict:= Util.load_json_as_dict(filename, func(error): return {})
+	if dict:
+		if "major" in dict:
+			major = int(dict["major"])
+		if "minor" in dict:
+			minor = int(dict["minor"])
+		if "patch" in dict:
+			patch = int(dict["patch"])
+		if "build" in dict:
+			build = int(dict["build"])
+		return true
+	return false
 
 func equals(v: Version) -> bool:
 	return major == v.major and minor == v.minor and patch == v.patch and build == v.build
@@ -53,32 +81,3 @@ func greater_than(v: Version) -> bool:
 	if patch < v.patch:
 		return false
 	return build > v.build
-
-static func parse_string(s: String) -> Version:
-	var v = Version.new()
-	var parts:= s.split(".")
-	if parts.size() > 0:
-		v.major = int(parts[0])
-	if parts.size() > 1:
-		v.minor = int(parts[1])
-	if parts.size() > 2:
-		v.patch = int(parts[2])
-	if parts.size() > 3:
-		v.build = int(parts[3])
-	return v
-
-static func load_from_file(filename: String) -> Version:
-	var file = FileAccess.open(filename, FileAccess.READ)
-	var json = JSON.new()
-	json.parse(file.get_as_text())
-	file.close()
-	var version = Version.new()
-	if "major" in json.data:
-		version.major = int(json.data["major"])
-	if "minor" in json.data:
-		version.minor = int(json.data["minor"])
-	if "patch" in json.data:
-		version.patch = int(json.data["patch"])
-	if "build" in json.data:
-		version.build = int(json.data["build"])
-	return version
