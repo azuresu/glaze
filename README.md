@@ -123,17 +123,11 @@ Command list:
 
 命令列表：
 
-```update_build_number -version_file <path>```
+```update_build_number -version_file <path> [-update_project_file]```
 
-Increases version build number by 1 in the version file.
+Increases version build number by 1 in the version file. You can also update project file with the new version (optional).
 
-将版本文件中的版本构建号加1。
-
-```update_project_version -version_file <path>```
-
-Update project version in project file from version file.
-
-将项目版本更新为版本号中的值。
+将版本文件中的版本构建号加1。同时可以把最新的版本号更新进项目文件（可选）。
 
 ## Custom nodes
 

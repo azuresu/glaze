@@ -8,6 +8,14 @@ var build: int
 func _to_string() -> String:
 	return format()
 
+func copy() -> Version:
+	var c = Version.new()
+	c.major = major
+	c.minor = minor
+	c.patch = patch
+	c.build = build
+	return c
+
 func format(includes_build:= true) -> String:
 	if includes_build:
 		return "%s.%s.%s.%s" % [major, minor, patch, build]
