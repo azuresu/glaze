@@ -123,7 +123,11 @@ Command list:
 
 命令列表：
 
- - update_build_number -version_file <path>
+```update_build_number -version_file <path>```
+
+Increase version build by 1 in the version file.
+
+将版本文件中的版本构建号加1。
 
 ## Custom nodes
 
