@@ -125,7 +125,7 @@ Command list:
 
 ```update_build_number -version_file <path>```
 
-Increase version build by 1 in the version file.
+Increases version build number by 1 in the version file.
 
 将版本文件中的版本构建号加1。
 
