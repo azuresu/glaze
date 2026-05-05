@@ -129,6 +129,12 @@ Increases version build number by 1 in the version file.
 
 将版本文件中的版本构建号加1。
 
+```update_project_version -version_file <path>```
+
+Update project version in project file from version file.
+
+将项目版本更新为版本号中的值。
+
 ## Custom nodes
 
 ### Evaluate

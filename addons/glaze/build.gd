@@ -59,12 +59,33 @@ func update_build_number() -> int:
 	if has_argument("version_file"):
 		var version_file = get_argument("version_file")
 		var version:= Version.new()
-		version.load_from_file(version_file)
-		if version:
+		if version.load_from_file(version_file):
 			version.build += 1
 			version.save_to_file(version_file)
 			_info("Updated version %s into %s" % [version, version_file])
 			return 0
+		else:
+			_error("Invalid version file: %s" % version_file)
+	else:
+		_error("No version_file in arguments.")
+	return 1
+
+## update_project_version -version_file <path>
+func update_project_version() -> bool:
+	var version:= Version.new()
+	if has_argument("version_file"):
+		var version_file = get_argument("version_file")
+		if version.load_from_file(version_file):
+			var proj_file:= "project.godot"
+			var proj_config = ConfigFile.new()
+			var error = proj_config.load(proj_file)
+			if error == OK:
+				proj_config.set_value("application", "config/version", version.format())
+				proj_config.save(proj_file)
+				_info("Updated project version to %s" % version)
+				return 0
+			else:
+				_error("Failed to load project file: %s" % proj_file)
 		else:
 			_error("Invalid version file: %s" % version_file)
 	else:
