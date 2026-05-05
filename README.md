@@ -106,6 +106,25 @@ func _set_invis() -> void:
 		node.visible = false
 ```
 
+### Build
+A build script can be run directly in headless mode.
+
+一个可以直接以无GUI方式运行的构建脚本。
+
+You can call it as following way in your shell script:
+
+你可以在自己的shell脚本里用如下的方式调用：
+
+```
+%GODOT% --headless -s addons\glaze\build.gd -- <command> [arguments]
+```
+
+Command list:
+
+命令列表：
+
+ - update_build_number -version_file <path>
+
 ## Custom nodes
 
 ### Evaluate
