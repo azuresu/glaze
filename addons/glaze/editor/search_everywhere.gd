@@ -15,6 +15,23 @@ var text_search_mutex:= Mutex.new()
 
 var _exited: bool
 
+func open_file(path: String) -> void:
+	if path.ends_with(".tscn"):
+		EditorInterface.open_scene_from_path(path)
+		var res = load(path)
+		if res is PackedScene:
+			var root_type = res.get_state().get_node_type(0)
+			if ClassDB.is_parent_class(root_type, "Node3D"):
+				EditorInterface.set_main_screen_editor("3D")
+			else:
+				EditorInterface.set_main_screen_editor("2D")
+	elif path.ends_with(".gd"):
+		EditorInterface.edit_script(load(path))
+		EditorInterface.set_main_screen_editor("Script")
+	else:
+		EditorInterface.edit_resource(load(path))
+	hide()
+
 func _ready() -> void:
 	text_search_thread = Thread.new()
 	text_search_thread.start(_search_text_files, Thread.PRIORITY_LOW)
@@ -38,8 +55,7 @@ func _on_keyword_gui_input(event: InputEvent) -> void:
 			KEY_ENTER:
 				var file:= _get_selected_file()
 				if file:
-					_open_file("res://%s" % file.full_path)
-					hide()
+					open_file("res://%s" % file.full_path)
 			KEY_UP:
 				_move_select_result(-1)
 				%Keyword.grab_focus()
@@ -126,22 +142,6 @@ func _list_files(options: Options, dir_path: String, files: Array[File]) -> void
 		for sub_path in dir.get_directories():
 			if not sub_path.begins_with("."):
 				_list_files(options, "%s/%s" % [dir_path, sub_path], files)
-
-func _open_file(path: String) -> void:
-	if path.ends_with(".tscn"):
-		EditorInterface.open_scene_from_path(path)
-		var res = load(path)
-		if res is PackedScene:
-			var root_type = res.get_state().get_node_type(0)
-			if ClassDB.is_parent_class(root_type, "Node3D"):
-				EditorInterface.set_main_screen_editor("3D")
-			else:
-				EditorInterface.set_main_screen_editor("2D")
-	elif path.ends_with(".gd"):
-		EditorInterface.edit_script(load(path))
-		EditorInterface.set_main_screen_editor("Script")
-	else:
-		EditorInterface.edit_resource(load(path))
 
 func _is_text(filename: String) -> bool:
 	var lower:= filename.to_lower()

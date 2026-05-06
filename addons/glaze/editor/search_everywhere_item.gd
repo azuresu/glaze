@@ -94,4 +94,4 @@ func _on_mouse_exited() -> void:
 
 func _on_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MouseButton.MOUSE_BUTTON_LEFT:
-		search._open_file("res://%s" % file.full_path)
+		search.open_file("res://%s" % file.full_path)
