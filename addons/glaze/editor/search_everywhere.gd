@@ -59,9 +59,11 @@ func _on_keyword_gui_input(event: InputEvent) -> void:
 			KEY_UP:
 				_move_select_result(-1)
 				%Keyword.grab_focus()
+				get_viewport().set_input_as_handled()
 			KEY_DOWN:
 				_move_select_result(1)
 				%Keyword.grab_focus()
+				get_viewport().set_input_as_handled()
 			KEY_ESCAPE:
 				hide()
 
@@ -97,7 +99,11 @@ func _get_selected_file() -> File:
 func _select_result(index: int) -> void:
 	if index >= 0 and index < %ResultList.get_child_count():
 		for i in %ResultList.get_child_count():
-			%ResultList.get_child(i).selected = i == index
+			var item:= %ResultList.get_child(i)
+			item.selected = i == index
+			if item.selected:
+				%ResultScroll.ensure_control_visible(item)
+				%ResultScroll.scroll_horizontal = 0
 
 func _move_select_result(offset: int) -> void:
 	for i in %ResultList.get_child_count():
