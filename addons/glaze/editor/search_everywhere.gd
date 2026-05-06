@@ -34,20 +34,20 @@ func _on_about_to_popup() -> void:
 
 func _on_keyword_gui_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
-		var file:= _get_selected_file()
-		if file:
-			match event.keycode:
-				KEY_ENTER:
+		match event.keycode:
+			KEY_ENTER:
+				var file:= _get_selected_file()
+				if file:
 					_open_file("res://%s" % file.full_path)
 					hide()
-				KEY_UP:
-					_move_select_result(-1)
-					%Keyword.grab_focus()
-				KEY_DOWN:
-					_move_select_result(1)
-					%Keyword.grab_focus()
-				KEY_ESCAPE:
-					hide()
+			KEY_UP:
+				_move_select_result(-1)
+				%Keyword.grab_focus()
+			KEY_DOWN:
+				_move_select_result(1)
+				%Keyword.grab_focus()
+			KEY_ESCAPE:
+				hide()
 
 func _search() -> void:
 	text_search_keyword = ""
@@ -56,7 +56,7 @@ func _search() -> void:
 	text_search_file_index = 0
 	text_search_mutex.unlock()
 	for ch in %ResultList.get_children():
-		ch.free_item()
+		ch.free()
 	if %Keyword.text:
 		var options:= Options.new()
 		options.keyword = %Keyword.text
@@ -90,11 +90,13 @@ func _move_select_result(offset: int) -> void:
 				_select_result(i - 1)
 			elif offset > 0:
 				_select_result(i + 1)
-			break
+			return
+	# Select first one in default.
+	_select_result(0)
 
 func _add_result(f: File) -> void:
 	for ch in %ResultList.get_children():
-		if ch.visible and ch.file == f:
+		if ch.file == f:
 			ch.update_ui()
 			return
 	var item = item_scene.instantiate()

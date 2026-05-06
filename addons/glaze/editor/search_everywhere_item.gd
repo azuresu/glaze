@@ -29,10 +29,6 @@ func init_item(file: SearchEverywhere.File, search: SearchEverywhere) -> void:
 	%LineLabel.text = ""
 	update_ui()
 
-func free_item() -> void:
-	visible = false
-	queue_free()
-
 func update_ui() -> void:
 
 	var base:= EditorInterface.get_base_control()
@@ -97,5 +93,5 @@ func _on_mouse_exited() -> void:
 	hovered = false
 
 func _on_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.pressed:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MouseButton.MOUSE_BUTTON_LEFT:
 		search._open_file("res://%s" % file.full_path)
