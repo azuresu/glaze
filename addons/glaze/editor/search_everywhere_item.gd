@@ -71,15 +71,17 @@ func update_ui() -> void:
 			if keyword:
 				var i = line.findn(keyword)
 				if i == -1:
-					line_list = "Line %s: %s" % [ln, line]
+					line_list += "Line %s: %s" % [ln, line]
 				else:
 					var s:= ["", "", ""]
 					s[0] = line.substr(0, i)
 					s[1] = line.substr(i, keyword.length())
 					s[2] = line.substr(i + keyword.length())
-					line_list = "Line %s: %s" % [ln, "%s[b]%s[/b]%s" % s]
+					line_list += "Line %s: %s" % [ln, "%s[b]%s[/b]%s" % s]
 			else:
-				line_list = "Line %s: %s" % [ln, line]
+				line_list += "Line %s: %s" % [ln, line]
+		if file.lines_more:
+			line_list += "\nmore..."
 		%LineLabel.text = line_list
 		%LineLabel.visible = true
 	else:
