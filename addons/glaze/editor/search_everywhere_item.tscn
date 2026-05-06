@@ -62,6 +62,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_8lgot")
 bbcode_enabled = true
 text = "filename"
 fit_content = true
+autowrap_mode = 0
 
 [node name="DirPathLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -80,6 +81,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_8lgot")
 bbcode_enabled = true
 text = "line"
 fit_content = true
+autowrap_mode = 0
 
 [node name="Timer" type="Timer" parent="."]
 autostart = true
