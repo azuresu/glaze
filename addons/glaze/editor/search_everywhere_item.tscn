@@ -4,7 +4,7 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2nk70"]
 resource_local_to_scene = true
-bg_color = Color(0, 0, 0, 0)
+bg_color = Color(1, 1, 1, 0)
 border_width_bottom = 1
 border_color = Color(0.23392555, 0.23392546, 0.23392531, 1)
 
@@ -35,12 +35,16 @@ layout_mode = 2
 size_flags_vertical = 0
 theme_override_constants/separation = 5
 
-[node name="IconRect" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 5
+
+[node name="IconRect" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 size_flags_horizontal = 0
-size_flags_vertical = 4
+size_flags_vertical = 0
 expand_mode = 5
 stretch_mode = 5
 
@@ -66,6 +70,21 @@ theme_override_colors/font_color = Color(0.60933006, 0.6093301, 0.60933006, 1)
 theme_override_font_sizes/font_size = 14
 text = "path"
 
+[node name="LineLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxEmpty_2nk70")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8lgot")
+bbcode_enabled = true
+text = "line"
+fit_content = true
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
