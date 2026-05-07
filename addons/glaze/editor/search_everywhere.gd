@@ -1,19 +1,7 @@
 @tool
 class_name SearchEverywhere extends Window
 
-const LINE_FOUND_MAX:= 5
-
 static var item_scene = preload("res://addons/glaze/editor/search_everywhere_item.tscn")
-static var text_suffixes = [".txt", ".tscn", ".tres", ".json", ".csv", ".xml", ".properties", ".md"]
-
-var text_search_keyword: String
-var text_search_files: Array[File]
-var text_search_file_index: int
-var text_search_thread:= Thread.new()
-var text_search_semaphore:= Semaphore.new()
-var text_search_mutex:= Mutex.new()
-
-var _exited: bool
 
 func open_file(path: String) -> void:
 	if path.ends_with(".tscn"):
@@ -32,9 +20,22 @@ func open_file(path: String) -> void:
 		EditorInterface.edit_resource(load(path))
 	hide()
 
+func search() -> void:
+	for ch in %ResultList.get_children():
+		ch.free()
+	if %Keyword.text:
+		var options:= Options.new()
+		options.keyword = %Keyword.text
+		options.addons = %Addons.button_pressed
+		options.uid = %UID.button_pressed
+		options.import = %Import.button_pressed
+		options.searchInFiles = %SearchInFiles.button_pressed
+		$Worker.search(options)
+
 func _ready() -> void:
-	text_search_thread = Thread.new()
-	text_search_thread.start(_search_text_files, Thread.PRIORITY_LOW)
+	$Worker.progress_updated.connect(_on_progress_updated)
+	$Worker.file_found.connect(_on_file_found)
+	pass
 
 func _process(delta: float) -> void:
 	%CountLabel.text = "Found: %s" % %ResultList.get_child_count()
@@ -67,29 +68,6 @@ func _on_keyword_gui_input(event: InputEvent) -> void:
 			KEY_ESCAPE:
 				hide()
 
-func _search() -> void:
-	text_search_keyword = ""
-	text_search_mutex.lock()
-	text_search_files.clear()
-	text_search_file_index = 0
-	text_search_mutex.unlock()
-	for ch in %ResultList.get_children():
-		ch.free()
-	if %Keyword.text:
-		var options:= Options.new()
-		options.keyword = %Keyword.text
-		options.addons = %Addons.button_pressed
-		options.uid = %UID.button_pressed
-		options.import = %Import.button_pressed
-		options.searchInFiles = %SearchInFiles.button_pressed
-		var files: Array[File]
-		_list_files(options, "", files)
-		files.sort_custom(func(f1, f2) -> bool: return f1.full_path.length() < f2.full_path.length())
-		for f in files:
-			_add_result(f)
-		text_search_keyword = options.keyword
-		text_search_semaphore.post()
-
 func _get_selected_file() -> File:
 	for ch in %ResultList.get_children():
 		if ch.selected:
@@ -116,7 +94,11 @@ func _move_select_result(offset: int) -> void:
 	# Select first one in default.
 	_select_result(0)
 
-func _add_result(f: File) -> void:
+func _on_progress_updated(index: int, total: int) -> void:
+	%ProgressBar.max_value = total
+	%ProgressBar.value = index
+
+func _on_file_found(f: File) -> void:
 	for ch in %ResultList.get_children():
 		if ch.file == f:
 			ch.update_ui()
@@ -127,86 +109,23 @@ func _add_result(f: File) -> void:
 	if not _get_selected_file():
 		_select_result(0)
 
-func _list_files(options: Options, dir_path: String, files: Array[File]) -> void:
-	var dir:= DirAccess.open("res://%s" % dir_path)
-	if dir:
-		if dir_path.begins_with("/addons/") and not options.addons:
-			return
-		for f in dir.get_files():
-			if f.ends_with(".uid") and not options.uid:
-				continue
-			if f.ends_with(".import") and not options.import:
-				continue
-			var file = File.new(dir_path, f)
-			if f.containsn(options.keyword):
-				file.keyword = options.keyword
-				files.append(file)
-			if options.searchInFiles and _is_text(f):
-				text_search_mutex.lock()
-				text_search_files.append(file)
-				text_search_mutex.unlock()
-		for sub_path in dir.get_directories():
-			if not sub_path.begins_with("."):
-				_list_files(options, "%s/%s" % [dir_path, sub_path], files)
-
-func _is_text(filename: String) -> bool:
-	var lower:= filename.to_lower()
-	for s in text_suffixes:
-		if lower.ends_with(s):
-			return true
-	return false
-
-func _search_text_files() -> void:
-	while not _exited:
-		text_search_semaphore.wait()
-		while true:
-			var k:= text_search_keyword
-			var f: File
-			text_search_mutex.lock()
-			if text_search_file_index < text_search_files.size():
-				f = text_search_files[text_search_file_index]
-				text_search_file_index += 1
-			text_search_mutex.unlock()
-			if k and f:
-				var fa = FileAccess.open("res://%s" % f.full_path, FileAccess.READ)
-				var ln = 0
-				while not fa.eof_reached():
-					k = text_search_keyword
-					if k:
-						var line:= fa.get_line()
-						ln += 1
-						if line.containsn(k):
-							if f.lines.size() < LINE_FOUND_MAX:
-								f.keyword = k
-								f.lines[ln] = line
-								call_deferred("_add_result", f)
-							else:
-								f.lines_more = true
-								call_deferred("_add_result", f)
-								break
-					else:
-						break
-				fa.close()
-			else:
-				break
-
 func _on_keyword_text_changed(new_text: String) -> void:
-	_search()
+	search()
 
 func _on_addons_toggled(toggled_on: bool) -> void:
-	_search()
+	search()
 
 func _on_uid_toggled(toggled_on: bool) -> void:
-	_search()
+	search()
 
 func _on_import_toggled(toggled_on: bool) -> void:
-	_search()
+	search()
 
 func _on_search_in_files_toggled(toggled_on: bool) -> void:
-	_search()
+	search()
 
 func _exit_tree() -> void:
-	_exited = true
+	$Worker.stop()
 
 class Options:
 
