@@ -40,11 +40,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		elif not event.pressed and _search_press_count % 2 == 1:
 			s = 1
 		_search_press_count += s
-		_search_press_timeout = 0.15
+		_search_press_timeout = 0.12
 		if _search_press_count == 4:
 			_search_press_count = 0
 			_search_press_timeout = 0
-			search_everywhere.popup_centered()
+			search_everywhere.open()
 
 func _process(delta: float) -> void:
 	_search_press_timeout = maxf(0, _search_press_timeout - delta)

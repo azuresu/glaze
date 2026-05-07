@@ -1,7 +1,21 @@
 @tool
 class_name SearchEverywhere extends Window
 
+const RELATIVE_SIZE:= Vector2(0.5, 0.7)
+const MINIMUM_SIZE:= Vector2i(600, 400)
+
 static var item_scene = preload("res://addons/glaze/editor/search_everywhere_item.tscn")
+
+var _opened_once: bool
+
+func open() -> void:
+	if not _opened_once:
+		_opened_once = true
+		var popup_size:= DisplayServer.window_get_size()
+		popup_size.x = maxi(MINIMUM_SIZE.x, popup_size.x * RELATIVE_SIZE.x)
+		popup_size.y = maxi(MINIMUM_SIZE.y, popup_size.y * RELATIVE_SIZE.y)
+		size = popup_size
+	popup_centered()
 
 func open_file(path: String) -> void:
 	if path.ends_with(".tscn"):

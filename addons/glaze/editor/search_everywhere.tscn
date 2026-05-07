@@ -12,8 +12,8 @@ bg_color = Color(0.09620472, 0.09620475, 0.09620469, 1)
 oversampling_override = 1.0
 title = "GLAZE search everywhere"
 position = Vector2i(0, 36)
-size = Vector2i(800, 600)
-popup_window = true
+size = Vector2i(600, 400)
+visible = false
 script = ExtResource("1_0c1v3")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]

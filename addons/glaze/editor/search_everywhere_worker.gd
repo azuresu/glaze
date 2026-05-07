@@ -6,7 +6,7 @@ const LINE_FOUND_MAX:= 5
 signal progress_updated(index: int, total: int)
 signal file_found(file: SearchEverywhere.File)
 
-static var text_suffixes = [".txt", ".tscn", ".tres", ".json", ".csv", ".xml", ".properties", ".md"]
+static var text_suffixes = [".txt", ".tscn", ".tres", ".json", ".csv", ".xml", ".properties", ".md", ".uid", ".import"]
 
 var thread:= Thread.new()
 var options: SearchEverywhere.Options
@@ -59,7 +59,7 @@ func _scan_dirs(dir_path: String) -> void:
 		return
 	var dir:= DirAccess.open("res://%s" % dir_path)
 	if dir:
-		if dir_path.begins_with("/addons/") and not options.addons:
+		if dir_path == "/addons" and not options.addons:
 			return
 		in_dirs.append(dir_path)
 		for f in dir.get_files():

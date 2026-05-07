@@ -77,7 +77,7 @@ func update_ui() -> void:
 			else:
 				line_list += "[color=#808080]Line %s:[/color] %s" % [ln, line]
 		if file.lines_more:
-			line_list += "\nmore..."
+			line_list += "\n[color=#808080]More...[/color]"
 		%LineLabel.text = line_list
 		%LineLabel.visible = true
 	else:
