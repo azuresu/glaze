@@ -19,7 +19,6 @@ var scene_data_allow_builtin_types: bool
 var translation_languages: Array
 var translation_files: Array
 
-var _builtin_parsers: Array[Parser]
 var _packed_scenes: Dictionary[String, Resource]
 var _load_scenes_thread: Thread
 var _load_scenes_queue: Array[String]
@@ -66,7 +65,7 @@ func new_scene(scene_name: String, parent: Node = null, params:= {}) -> Node:
 		# Copy data into scene.
 		if scene_name in scene_data:
 			var data: Dictionary = scene_data[scene_name]
-			for k in scene_data[scene_name]:
+			for k in data:
 				if k in scene:
 					scene[k] = data[k]
 		scene.set_meta("scene_name", scene_name)
@@ -202,59 +201,29 @@ func log_msg(level: LogLevel, message: String, ...args) -> void:
 		else:
 			print("%s | %s | %s" % [time_str, _LOG_LEVEL_NAMES[level], msg_str])
 
-## Adds built-in parser.
-## Added parser is always inserted to the first position in parser queue therefore it has chance to override default parsers.
-func add_builtin_parser(parser: Parser) -> void:
-	_builtin_parsers.insert(0, parser)
-
-## Removes built-in parser.
-func remove_builtin_parser(parser: Parser) -> void:
-	_builtin_parsers.erase(parser)
-
-## Parses given argument with built-in parsers.
-func parse_builtin_types(value: Variant) -> Variant:
-	if value is Array:
-		for i in value.size():
-			value[i] = parse_builtin_types(value[i])
-	elif value is Dictionary:
-		for k in value:
-			value[k] = parse_builtin_types(value[k])
-	elif value is String:
-		for p in _builtin_parsers:
-			if p.can_parse(value):
-				return p.parse(value)
-	return value
-
-## Formats given argument with built-in parsers.
-func format_builtin_types(value: Variant) -> Variant:
-	if value is Array:
-		for i in value.size():
-			value[i] = format_builtin_types(value[i])
-	elif value is Dictionary:
-		for k in value:
-			value[k] = format_builtin_types(value[k])
-	for p in _builtin_parsers:
-		if p.can_format(value):
-			return p.format(value)
-	return value
-
 ## Loads JSON as dictionary from file.
-func load_json_as_dict(filename: String, parse_builtin_types:= false) -> Dictionary:
-	var dict:= Util.load_json_as_dict(filename, func(error):
-		log_error(error)
+func load_json_as_dict(filename: String) -> Dictionary:
+	return JsonExt.new().load_file_as_dict(filename, func(error: JsonExt.Error):
+		match error:
+			JsonExt.Error.TEXT_NOT_JSON:
+				log_error("Invalid JSON in file: %s" % filename)
+			JsonExt.Error.TEXT_NOT_JSON_DICT:
+				log_error("JSON is not a dictionary in file: %s" % filename)
+			JsonExt.Error.FILE_NOT_FOUND:
+				log_error("File not found: %s" % filename)
 		return {})
-	if dict and parse_builtin_types:
-		parse_builtin_types(dict)
-	return dict
 
 ## Loads JSON as array from file.
 func load_json_as_array(filename: String, parse_builtin_types:= false) -> Array:
-	var array:= Util.load_json_as_array(filename, func(error):
-		log_error(error)
-		return [])
-	if array and parse_builtin_types:
-		parse_builtin_types(array)
-	return array
+	return JsonExt.new().load_file_as_array(filename, func(error: JsonExt.Error):
+		match error:
+			JsonExt.Error.TEXT_NOT_JSON:
+				log_error("Invalid JSON in file: %s" % filename)
+			JsonExt.Error.TEXT_NOT_JSON_ARRAY:
+				log_error("JSON is not an array in file: %s" % filename)
+			JsonExt.Error.FILE_NOT_FOUND:
+				log_error("File not found: %s" % filename)
+		return {})
 
 func load_config() -> void:
 	log_info("Loading configuration: %s", _CONFIG_FILE)
@@ -286,9 +255,12 @@ func load_config() -> void:
 			scene_data_files = config["scene_data_files"] as Array
 
 		if scene_data_files:
+			var scene_data_json_ext = JsonExt.new()
+			if scene_data_allow_builtin_types:
+				scene_data_json_ext.add_builtin_parsers()
 			for file in scene_data_files:
 				log_debug("Loading scene data file: %s", file)
-				var data:= load_json_as_dict(file, scene_data_allow_builtin_types)
+				var data:= scene_data_json_ext.load_file_as_dict(file)
 				for scene_name in data:
 					if scene_name in scene_data:
 						scene_data[scene_name].merge(data[scene_name], true)
@@ -312,7 +284,6 @@ func load_config() -> void:
 		log_warn("Missing configuration file: %s", _CONFIG_FILE)
 
 func _ready() -> void:
-	_builtin_parsers.append_array(Parser.builtin_parsers)
 	load_config()
 
 func _merge_derived_data(scene_name: String, derived_chain:= {}) -> Dictionary:

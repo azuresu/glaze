@@ -44,7 +44,7 @@ func save_to_file(filename: String) -> bool:
 	return true
 
 func load_from_file(filename: String) -> bool:
-	var dict:= Util.load_json_as_dict(filename, func(error): return {})
+	var dict:= JsonExt.new().load_file_as_dict(filename)
 	if dict:
 		if "major" in dict:
 			major = int(dict["major"])
