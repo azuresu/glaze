@@ -197,16 +197,6 @@ Comparing with Godot bulti-in timer, it has advantages:
 
 - 随机的启动时间用来在大量间隔器同时加入场景树时减少卡顿（比如读取游戏存盘时）。
 
-### Press
-
-A button which calls a function named by its own name when pressed.
-
-一个被按下时会调用同名函数的按钮。
-
-Yeah, I am too lazy to connect 'pressed' signal.
-
-嗯，我连连接'pressed'信号都懒得去做了。
-
 ### StateMachine and State
 
 A simple implementation of state machine. Just another lovely wheel :)
