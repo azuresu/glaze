@@ -68,7 +68,7 @@ autowrap_mode = 0
 [node name="DirPathLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.60933006, 0.6093301, 0.60933006, 1)
+theme_override_colors/font_color = Color(0.5019608, 0.5019608, 0.5019608, 1)
 theme_override_font_sizes/font_size = 14
 text = "path"
 

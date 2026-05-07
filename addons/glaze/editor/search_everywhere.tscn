@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://dsqiitbsnxk63"]
+[gd_scene load_steps=5 format=3 uid="uid://dsqiitbsnxk63"]
 
 [ext_resource type="Script" uid="uid://bvxqltjc5vtjg" path="res://addons/glaze/editor/search_everywhere.gd" id="1_0c1v3"]
 [ext_resource type="Script" uid="uid://2go460yr54t1" path="res://addons/glaze/editor/search_everywhere_worker.gd" id="2_rdgms"]
@@ -6,12 +6,13 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0c1v3"]
 bg_color = Color(0.09620472, 0.09620475, 0.09620469, 1)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rdgms"]
+
 [node name="SearchEverywhere" type="Window"]
 oversampling_override = 1.0
 title = "GLAZE search everywhere"
 position = Vector2i(0, 36)
 size = Vector2i(800, 600)
-visible = false
 popup_window = true
 script = ExtResource("1_0c1v3")
 
@@ -51,19 +52,24 @@ theme_override_constants/separation = 0
 layout_mode = 2
 theme_override_constants/separation = 5
 
-[node name="CountLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Found: 0"
-
-[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 15)
+[node name="PanelContainer" type="PanelContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxEmpty_rdgms")
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/HBoxContainer/PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
 show_percentage = false
+
+[node name="CountLabel" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Found: 0"
+horizontal_alignment = 1
 
 [node name="Addons" type="CheckButton" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true

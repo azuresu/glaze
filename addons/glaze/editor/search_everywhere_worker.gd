@@ -63,9 +63,7 @@ func _scan_dirs(dir_path: String) -> void:
 			return
 		in_dirs.append(dir_path)
 		for f in dir.get_files():
-			if f.ends_with(".uid") and not options.uid:
-				continue
-			if f.ends_with(".import") and not options.import:
+			if _is_ignored(f):
 				continue
 			if options.searchInFiles and _is_text(f):
 				mutex.lock()
@@ -79,6 +77,7 @@ func _scan_dirs(dir_path: String) -> void:
 
 func _search_in_dirs() -> void:
 	while not stopped and not new_search:
+		await get_tree().process_frame
 		var dir_path: String
 		var dir_next:= true # Cannot use dir_path as "" means root directory.
 		mutex.lock()
@@ -94,6 +93,8 @@ func _search_in_dirs() -> void:
 			var dir:= DirAccess.open("res://%s" % dir_path)
 			if dir:
 				for f in dir.get_files():
+					if _is_ignored(f):
+						continue
 					if f.containsn(options.keyword):
 						var file = SearchEverywhere.File.new(dir_path, f)
 						if file.full_path in scanned_files:
@@ -105,6 +106,7 @@ func _search_in_dirs() -> void:
 
 func _search_in_files() -> void:
 	while not stopped and not new_search:
+		await get_tree().process_frame
 		var file: SearchEverywhere.File
 		mutex.lock()
 		if in_file_index < in_files.size():
@@ -135,6 +137,13 @@ func _search_in_files() -> void:
 				break
 		else:
 			break
+
+func _is_ignored(filename: String) -> bool:
+	if filename.ends_with(".uid") and not options.uid:
+		return true
+	if filename.ends_with(".import") and not options.import:
+		return true
+	return false
 
 func _is_text(filename: String) -> bool:
 	var lower:= filename.to_lower()
