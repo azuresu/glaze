@@ -6,7 +6,7 @@ const LINE_FOUND_MAX:= 5
 signal progress_updated(index: int, total: int)
 signal file_found(file: SearchEverywhere.File)
 
-static var text_suffixes = [".txt", ".tscn", ".tres", ".json", ".csv", ".xml", ".properties", ".md", ".uid", ".import"]
+static var text_suffixes = [".gd", ".txt", ".tscn", ".tres", ".json", ".csv", ".xml", ".properties", ".md", ".uid", ".import"]
 
 var thread:= Thread.new()
 var options: SearchEverywhere.Options
