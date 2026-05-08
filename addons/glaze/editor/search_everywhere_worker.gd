@@ -89,7 +89,7 @@ func _search_in_dirs() -> void:
 		mutex.unlock()
 		if dir_next:
 			progress_index += 1
-			call_deferred("_emit_progress_updated", progress_index, progress_total)
+			_emit_progress_updated.call_deferred(progress_index, progress_total)
 			var dir:= DirAccess.open("res://%s" % dir_path)
 			if dir:
 				for f in dir.get_files():
@@ -100,7 +100,7 @@ func _search_in_dirs() -> void:
 						if file.full_path in scanned_files:
 							file = scanned_files[file.full_path]
 						file.keyword = options.keyword
-						call_deferred("_emit_file_found", file)
+						_emit_file_found.call_deferred(file)
 		else:
 			break
 
@@ -115,7 +115,7 @@ func _search_in_files() -> void:
 		mutex.unlock()
 		if file:
 			progress_index += 1
-			call_deferred("_emit_progress_updated", progress_index, progress_total)
+			_emit_progress_updated.call_deferred(progress_index, progress_total)
 			var keyword:= options.keyword
 			if keyword:
 				var fa = FileAccess.open("res://%s" % file.full_path, FileAccess.READ)
@@ -127,10 +127,10 @@ func _search_in_files() -> void:
 						if file.lines.size() < LINE_FOUND_MAX:
 							file.keyword = keyword
 							file.lines[ln] = line
-							call_deferred("_emit_file_found", file)
+							_emit_file_found.call_deferred(file)
 						else:
 							file.lines_more = true
-							call_deferred("_emit_file_found", file)
+							_emit_file_found.call_deferred(file)
 							break
 				fa.close()
 			else:
