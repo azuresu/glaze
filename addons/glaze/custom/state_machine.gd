@@ -15,7 +15,6 @@ func set_current_state(state_name: String, params:= {}) -> void:
 func _ready() -> void:
 	for ch in get_children():
 		if ch is State:
-			ch.machine = self
 			states[ch.name] = ch
 		else:
 			Glaze.log_warn("Non-state node: %s is under state machine: %s", ch, self)
@@ -23,7 +22,8 @@ func _ready() -> void:
 		current_state = states.values()[0]
 		Glaze.log_debug("State machine: %s has initial state: %s", self, current_state)
 	else:
-		Glaze.log_warn("No state found in state machine: %s", self)
+		if not Engine.is_editor_hint():
+			Glaze.log_warn("No state found in state machine: %s", self)
 
 func _process(delta: float) -> void:
 	if current_state:

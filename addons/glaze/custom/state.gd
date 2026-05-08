@@ -5,7 +5,9 @@ class_name State extends Node
 
 @export var reset_when_transition_to_self:= false
 
-var machine: StateMachine
+var machine: StateMachine:
+	get: return get_parent()
+
 var update_time: float
 
 func _transition(state_name: String, params:= {}) -> void:
