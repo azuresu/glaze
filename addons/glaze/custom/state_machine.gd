@@ -54,4 +54,4 @@ func _set_current_state(state_name: String, params:= {}) -> void:
 		state_entered.emit(current_state)
 		Glaze.log_debug("Current state entered: %s" % current_state)
 	else:
-		Glaze.log_error("No such state: %s in state machine: %s", state_name, self)
+		Glaze.log_warn("No such state: %s in state machine: %s", state_name, self)
