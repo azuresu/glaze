@@ -1,4 +1,3 @@
-@tool
 @icon("res://addons/glaze/custom/state_machine.png")
 ## StateMachine node contains one or more State nodes.
 class_name StateMachine extends Node

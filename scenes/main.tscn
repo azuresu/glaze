@@ -1,40 +1,41 @@
-[gd_scene load_steps=6 format=3 uid="uid://dev3qn47u2w17"]
+[gd_scene format=3 uid="uid://dev3qn47u2w17"]
 
 [ext_resource type="Script" uid="uid://b3xyw6m2r7xlh" path="res://scenes/main.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://46l7q0rcq4wj" path="res://addons/glaze/custom/evaluate.gd" id="2_0wfyh"]
 [ext_resource type="PackedScene" uid="uid://bw8i1ohgabm7j" path="res://addons/glaze/custom/percent_bar.tscn" id="3_jyhfs"]
 [ext_resource type="Script" uid="uid://qwie7ll7rwex" path="res://addons/glaze/custom/interval.gd" id="3_sugp2"]
 [ext_resource type="PackedScene" uid="uid://bq1qjb7o7enr4" path="res://addons/glaze/custom/percent_pie.tscn" id="4_tbgi4"]
+[ext_resource type="Script" uid="uid://dsf1e2ykref7v" path="res://addons/glaze/custom/animation_state.gd" id="6_tefeu"]
 
-[node name="Main" type="Node3D"]
+[node name="Main" type="Node3D" unique_id=1417057312]
 script = ExtResource("1_ig7tw")
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1918568116]
 transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 2, 3)
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=825285595]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 
-[node name="Time" type="Label3D" parent="."]
+[node name="Time" type="Label3D" parent="." unique_id=1033633051]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 billboard = 1
 text = "TIME"
 
-[node name="Version" type="Label3D" parent="."]
+[node name="Version" type="Label3D" parent="." unique_id=967467003]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 billboard = 1
 text = "VERSION"
 
-[node name="text" type="Node" parent="Version" node_paths=PackedStringArray("source")]
+[node name="text" type="Node" parent="Version" unique_id=595482003 node_paths=PackedStringArray("source")]
 script = ExtResource("2_0wfyh")
 source = NodePath("../..")
 source_var = "version"
 metadata/_custom_type_script = "uid://46l7q0rcq4wj"
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1996516880]
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer" unique_id=1279291157]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -45,40 +46,44 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MarginContainer" unique_id=1527475695]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/separation = 5
 
-[node name="Label" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=1375484671]
 layout_mode = 2
 text = "???"
 
-[node name="text" type="Node" parent="CanvasLayer/MarginContainer/VBoxContainer/Label" node_paths=PackedStringArray("source")]
+[node name="text" type="Node" parent="CanvasLayer/MarginContainer/VBoxContainer/Label" unique_id=1144016762 node_paths=PackedStringArray("source")]
 script = ExtResource("2_0wfyh")
 source = NodePath("../../../../..")
 source_var = "fps"
 metadata/_custom_type_script = "uid://46l7q0rcq4wj"
 
-[node name="PercentBar" parent="CanvasLayer/MarginContainer/VBoxContainer" instance=ExtResource("3_jyhfs")]
+[node name="PercentBar" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=883625282 instance=ExtResource("3_jyhfs")]
 layout_mode = 2
 
-[node name="PercentPie" parent="CanvasLayer/MarginContainer/VBoxContainer" instance=ExtResource("4_tbgi4")]
+[node name="PercentPie" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=2026073219 instance=ExtResource("4_tbgi4")]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="Button" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer"]
+[node name="Button" type="Button" parent="CanvasLayer/MarginContainer/VBoxContainer" unique_id=1234259667]
 layout_mode = 2
 text = "CLICKS:"
 
-[node name="text" type="Node" parent="CanvasLayer/MarginContainer/VBoxContainer/Button"]
+[node name="text" type="Node" parent="CanvasLayer/MarginContainer/VBoxContainer/Button" unique_id=1012621106]
 script = ExtResource("2_0wfyh")
 source_var = "click_text"
 metadata/_custom_type_script = "uid://46l7q0rcq4wj"
 
-[node name="update_time" type="Node" parent="."]
+[node name="update_time" type="Node" parent="." unique_id=1067396769]
 script = ExtResource("3_sugp2")
 updates_per_second = 1.0
 metadata/_custom_type_script = "uid://qwie7ll7rwex"
+
+[node name="AnimationState" type="Node" parent="." unique_id=410884814]
+script = ExtResource("6_tefeu")
+metadata/_custom_type_script = "uid://dsf1e2ykref7v"
 
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/Button" to="." method="_click_me"]
