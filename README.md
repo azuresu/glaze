@@ -131,6 +131,9 @@ Comparing with Godot bulti-in timer, it has advantages:
 ### StateMachine and State
 A simple implementation of state machine. Just another lovely wheel :)
 
+### AnimationStateMachine and AnimationState
+A state machine automatically wires up all animations into animation tree and uses current state to transition animation.
+
 ## Tools in Godot editor
 Some tools are added into Godot editor once plugin is enabled.
 
