@@ -1,6 +1,5 @@
 # Project Glaze
-[![English](https://shields.io)](README.md)
-[![Chinese](https://shields.io)](README.zh.md)
+🌐 [English](README.md) | [简体中文](README.zh.md)
 
 Godot Library by AZurEsu. It works as a plugin.
 
