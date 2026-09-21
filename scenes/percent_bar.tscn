@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bw8i1ohgabm7j"]
+[gd_scene format=3 uid="uid://bw8i1ohgabm7j"]
 
-[ext_resource type="Script" uid="uid://cqalf2y24uh7x" path="res://addons/glaze/custom/percent_bar.gd" id="1_7y8wk"]
+[ext_resource type="Script" uid="uid://cqalf2y24uh7x" path="res://scenes/percent_bar.gd" id="1_7y8wk"]
 [ext_resource type="Script" uid="uid://46l7q0rcq4wj" path="res://addons/glaze/custom/evaluate.gd" id="2_yklj2"]
 
 [node name="PercentBar" type="Control" node_paths=PackedStringArray("bar", "back")]

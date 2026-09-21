@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c8r2i0mst1a8u"
-path="res://.godot/imported/percent_pie.png-01d5f60fba4012900beb8b460f301f21.ctex"
+uid="uid://ctmibfrrj23bv"
+path="res://.godot/imported/logo_256x256.png-ba7d9a0d8347bd5ebafbc44e7b138acd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/glaze/custom/percent_pie.png"
-dest_files=["res://.godot/imported/percent_pie.png-01d5f60fba4012900beb8b460f301f21.ctex"]
+source_file="res://docs/logo_256x256.png"
+dest_files=["res://.godot/imported/logo_256x256.png-ba7d9a0d8347bd5ebafbc44e7b138acd.ctex"]
 
 [params]
 

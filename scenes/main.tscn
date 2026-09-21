@@ -2,10 +2,9 @@
 
 [ext_resource type="Script" uid="uid://b3xyw6m2r7xlh" path="res://scenes/main.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://46l7q0rcq4wj" path="res://addons/glaze/custom/evaluate.gd" id="2_0wfyh"]
-[ext_resource type="PackedScene" uid="uid://bw8i1ohgabm7j" path="res://addons/glaze/custom/percent_bar.tscn" id="3_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://bw8i1ohgabm7j" path="res://scenes/percent_bar.tscn" id="3_jyhfs"]
 [ext_resource type="Script" uid="uid://qwie7ll7rwex" path="res://addons/glaze/custom/interval.gd" id="3_sugp2"]
-[ext_resource type="PackedScene" uid="uid://bq1qjb7o7enr4" path="res://addons/glaze/custom/percent_pie.tscn" id="4_tbgi4"]
-[ext_resource type="Script" uid="uid://dsf1e2ykref7v" path="res://addons/glaze/custom/animation_state.gd" id="6_tefeu"]
+[ext_resource type="PackedScene" uid="uid://bq1qjb7o7enr4" path="res://scenes/percent_pie.tscn" id="4_tbgi4"]
 
 [node name="Main" type="Node3D" unique_id=1417057312]
 script = ExtResource("1_ig7tw")
@@ -81,9 +80,5 @@ metadata/_custom_type_script = "uid://46l7q0rcq4wj"
 script = ExtResource("3_sugp2")
 updates_per_second = 1.0
 metadata/_custom_type_script = "uid://qwie7ll7rwex"
-
-[node name="AnimationState" type="Node" parent="." unique_id=410884814]
-script = ExtResource("6_tefeu")
-metadata/_custom_type_script = "uid://dsf1e2ykref7v"
 
 [connection signal="pressed" from="CanvasLayer/MarginContainer/VBoxContainer/Button" to="." method="_click_me"]

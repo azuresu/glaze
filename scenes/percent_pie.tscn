@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bq1qjb7o7enr4"]
+[gd_scene format=3 uid="uid://bq1qjb7o7enr4"]
 
-[ext_resource type="Script" uid="uid://hs1gbp3havto" path="res://addons/glaze/custom/percent_pie.gd" id="1_wrebd"]
+[ext_resource type="Script" uid="uid://hs1gbp3havto" path="res://scenes/percent_pie.gd" id="1_wrebd"]
 
 [node name="PercentPie" type="Control"]
 clip_contents = true

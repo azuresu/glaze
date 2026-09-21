@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://rnarpl3ys3k8"
-path="res://.godot/imported/percent_bar.png-8154d5ebca3289fb4a008ac5440e70c4.ctex"
+uid="uid://bupnqprbpnea5"
+path="res://.godot/imported/glaze_store_thumbnail.webp-472b8c69e6a10b14081122249a0b61af.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/glaze/custom/percent_bar.png"
-dest_files=["res://.godot/imported/percent_bar.png-8154d5ebca3289fb4a008ac5440e70c4.ctex"]
+source_file="res://docs/glaze_store_thumbnail.webp"
+dest_files=["res://.godot/imported/glaze_store_thumbnail.webp-472b8c69e6a10b14081122249a0b61af.ctex"]
 
 [params]
 
