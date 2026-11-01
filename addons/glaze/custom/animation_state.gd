@@ -9,8 +9,6 @@ class_name AnimationState extends State
 
 var animation_time: float
 
-var _ana: AnimationNodeAnimation
-
 func get_speed_scale() -> float:
 	return speed_scale
 

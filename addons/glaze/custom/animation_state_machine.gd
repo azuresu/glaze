@@ -1,8 +1,11 @@
+@tool
 @icon("res://addons/glaze/custom/animation_state_machine.png")
-# A state machine automatically wires up all animation states into specified AnimationTree.
+# A state machine wires up all animation states into specified AnimationTree.
 class_name AnimationStateMachine extends StateMachine
 
 @export var animation_tree: AnimationTree
+@export var editor_node_gap:= Vector2i(200, 200)
+@export_tool_button("Build Tree Root") var build_button = _build
 
 # Cache conditions to improve performance (a lot!)
 var _animation_conditions: Dictionary[String, bool]
@@ -17,42 +20,58 @@ func play_animation(animation_name: String) -> void:
 	animation_tree.get("parameters/StateMachine/playback").start(animation_name)
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
 	super._ready()
 	state_entered.connect(_on_state_entered)
 	state_exited.connect(_on_state_exited)
-	_fix_tree()
+	animation_tree.animation_finished.connect(_on_animation_finished)
 
 func _process(delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
 	super._process(delta)
 	if current_state is AnimationState:
 		var anim_ss: float = current_state.get_speed_scale()
 		current_state.animation_time += delta * anim_ss
 		_set_animation_time_scale(anim_ss)
 
-func _fix_tree() -> void:
+func _build() -> void:
+	print("Building animation tree root...")
 	if animation_tree:
+		animation_tree.tree_root = null
 		var blend_tree:= AnimationNodeBlendTree.new()
 		var state_machine:= AnimationNodeStateMachine.new()
 		var time_scale:= AnimationNodeTimeScale.new()
 		blend_tree.add_node("StateMachine", state_machine)
 		blend_tree.add_node("TimeScale", time_scale)
+		blend_tree.set_node_position("StateMachine", Vector2(-2 * editor_node_gap.x, 0))
+		blend_tree.set_node_position("TimeScale", Vector2(-0.5 * editor_node_gap.x, 0))
 		blend_tree.connect_node("TimeScale", 0, "StateMachine")
 		blend_tree.connect_node("output", 0, "TimeScale")
 		var ap = animation_tree.get_node(animation_tree.anim_player)
 		if ap is AnimationPlayer:
-			_fix_animations(state_machine, ap)
-			_fix_transitions(state_machine)
+			_build_animations(state_machine, ap)
+			_build_transitions(state_machine)
+			print("Building animation tree root completed.")
 		else:
-			Glaze.log_error("Animation player not found in golem animation tree: %s", animation_tree)
+			printerr("Animation player not found in animation tree: %s" % animation_tree)
 		animation_tree.tree_root = blend_tree
-		animation_tree.animation_finished.connect(_on_animation_finished)
 	else:
-		Glaze.log_error("No animation tree set for animation state machine: %s", self)
+		printerr("No animation tree set for animation state machine: %s", self)
 
-func _fix_animations(sm: AnimationNodeStateMachine, ap: AnimationPlayer) -> void:
+func _build_animations(sm: AnimationNodeStateMachine, ap: AnimationPlayer) -> void:
+	print("Building animation nodes...")
+	var states: Dictionary[String, AnimationState]
+	for ch in get_children():
+		if ch is AnimationState:
+			states[ch.name] = ch
+	var cols:= maxi(1, int(sqrt(states.size())))
+	var pos: Vector2i
 	for state_name in states:
-		if state_name == "Start" or state_name == "End":
-			Glaze.log_warn("Animation state name is not allowed: %s" % state_name)
+		print("Building animation node: %s" % state_name)
+		if state_name == &"Start" or state_name == &"End":
+			printerr("Animation state name is not allowed: %s" % state_name)
 			continue
 		var s = states[state_name]
 		if s is AnimationState and not sm.has_node(state_name):
@@ -69,21 +88,28 @@ func _fix_animations(sm: AnimationNodeStateMachine, ap: AnimationPlayer) -> void
 				if ap.has_animation_library(anim_lib):
 					var lib:= ap.get_animation_library(anim_lib)
 					if not lib.has_animation(anim_name):
-						Glaze.log_error("Animation: %s not found in animation library %s used by state: %s", anim_name, anim_lib, state_name)
+						printerr("Animation: %s not found in animation library %s used by state: %s" % [anim_name, anim_lib, state_name])
 				else:
-					Glaze.log_error("Animation library %s not found used by state: %s", anim_lib, state_name)
+					printerr("Animation library: %s not found used by state: %s" % [anim_lib, state_name])
 			else:
 				if not ap.has_animation(anim_name):
-					Glaze.log_error("Animation %s not found used by state: %s", anim_name, state_name)
+					printerr("Animation %s not found used by state: %s" % [anim_name, state_name])
 			ana.animation = ("%s/%s" % [anim_lib, anim_name]) if anim_lib else anim_name
 			ana.play_mode = AnimationNodeAnimation.PLAY_MODE_BACKWARD if s.play_backward else AnimationNodeAnimation.PLAY_MODE_FORWARD
 			sm.add_node(state_name, ana)
-			s._ana = ana
+			sm.set_node_position(state_name, editor_node_gap * pos)
+			pos.x += 1
+			if pos.x >= cols:
+				pos.x = 0
+				pos.y += 1
 
-func _fix_transitions(sm: AnimationNodeStateMachine) -> void:
+func _build_transitions(sm: AnimationNodeStateMachine) -> void:
+	print("Building animation transitions...")
 	var node_list: Array[StringName] = sm.get_node_list()
 	for i in node_list.size():
 		if sm.get_node(node_list[i]) is AnimationNodeAnimation:
+			if node_list[i] == &"Start" or node_list[i] == &"End":
+				continue
 			for j in node_list.size():
 				if sm.get_node(node_list[j]) is AnimationNodeAnimation and not i == j and not _has_transition(sm, node_list[i], node_list[j]):
 					var trans:= AnimationNodeStateMachineTransition.new()
@@ -91,11 +117,10 @@ func _fix_transitions(sm: AnimationNodeStateMachine) -> void:
 					trans.advance_mode = AnimationNodeStateMachineTransition.ADVANCE_MODE_AUTO
 					trans.advance_condition = str(node_list[j])
 					sm.add_transition(node_list[i], node_list[j], trans)
-	# Add transition from start to current immediately.
-	if current_state and not _has_transition(sm, &"Start", current_state.name):
-		var trans:= AnimationNodeStateMachineTransition.new()
-		trans.advance_mode = AnimationNodeStateMachineTransition.ADVANCE_MODE_AUTO
-		sm.add_transition(&"Start", current_state.name, trans)
+			if not _has_transition(sm, &"Start", node_list[i]):
+				var trans:= AnimationNodeStateMachineTransition.new()
+				trans.advance_mode = AnimationNodeStateMachineTransition.ADVANCE_MODE_AUTO
+				sm.add_transition(&"Start", node_list[i], trans)
 
 func _has_transition(sm: AnimationNodeStateMachine, from: StringName, to: StringName) -> bool:
 	for i in sm.get_transition_count():
