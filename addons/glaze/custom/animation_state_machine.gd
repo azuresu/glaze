@@ -5,7 +5,7 @@ class_name AnimationStateMachine extends StateMachine
 
 @export var animation_tree: AnimationTree
 @export var editor_node_gap:= Vector2i(200, 200)
-@export_tool_button("Build Tree Root") var build_button = _build
+@export_tool_button("Build Tree Root") var build_button = _build_tree_root
 
 # Cache conditions to improve performance (a lot!)
 var _animation_conditions: Dictionary[String, bool]
@@ -36,7 +36,7 @@ func _process(delta: float) -> void:
 		current_state.animation_time += delta * anim_ss
 		_set_animation_time_scale(anim_ss)
 
-func _build() -> void:
+func _build_tree_root() -> void:
 	print("Building animation tree root...")
 	if animation_tree:
 		animation_tree.tree_root = null
@@ -51,8 +51,8 @@ func _build() -> void:
 		blend_tree.connect_node("output", 0, "TimeScale")
 		var ap = animation_tree.get_node(animation_tree.anim_player)
 		if ap is AnimationPlayer:
-			_build_animations(state_machine, ap)
-			_build_transitions(state_machine)
+			var first_state:= _build_animations(state_machine, ap)
+			_build_transitions(state_machine, first_state)
 			print("Building animation tree root completed.")
 		else:
 			printerr("Animation player not found in animation tree: %s" % animation_tree)
@@ -60,7 +60,7 @@ func _build() -> void:
 	else:
 		printerr("No animation tree set for animation state machine: %s", self)
 
-func _build_animations(sm: AnimationNodeStateMachine, ap: AnimationPlayer) -> void:
+func _build_animations(sm: AnimationNodeStateMachine, ap: AnimationPlayer) -> AnimationState:
 	print("Building animation nodes...")
 	var states: Dictionary[String, AnimationState]
 	for ch in get_children():
@@ -102,8 +102,9 @@ func _build_animations(sm: AnimationNodeStateMachine, ap: AnimationPlayer) -> vo
 			if pos.x >= cols:
 				pos.x = 0
 				pos.y += 1
+	return states.values()[0] if states else null
 
-func _build_transitions(sm: AnimationNodeStateMachine) -> void:
+func _build_transitions(sm: AnimationNodeStateMachine, first_state: AnimationState) -> void:
 	print("Building animation transitions...")
 	var node_list: Array[StringName] = sm.get_node_list()
 	for i in node_list.size():
@@ -111,16 +112,19 @@ func _build_transitions(sm: AnimationNodeStateMachine) -> void:
 			if node_list[i] == &"Start" or node_list[i] == &"End":
 				continue
 			for j in node_list.size():
+				if node_list[j] == &"Start" or node_list[j] == &"End":
+					continue
 				if sm.get_node(node_list[j]) is AnimationNodeAnimation and not i == j and not _has_transition(sm, node_list[i], node_list[j]):
 					var trans:= AnimationNodeStateMachineTransition.new()
 					trans.xfade_time = 0.2 # Maybe this should be configurable in animation state.
 					trans.advance_mode = AnimationNodeStateMachineTransition.ADVANCE_MODE_AUTO
 					trans.advance_condition = str(node_list[j])
 					sm.add_transition(node_list[i], node_list[j], trans)
-			if not _has_transition(sm, &"Start", node_list[i]):
-				var trans:= AnimationNodeStateMachineTransition.new()
-				trans.advance_mode = AnimationNodeStateMachineTransition.ADVANCE_MODE_AUTO
-				sm.add_transition(&"Start", node_list[i], trans)
+					print("Build transition from %s to to %s" % [node_list[i], node_list[j]])
+	if first_state:
+		var trans:= AnimationNodeStateMachineTransition.new()
+		trans.advance_mode = AnimationNodeStateMachineTransition.ADVANCE_MODE_AUTO
+		sm.add_transition(&"Start", first_state.name, trans)
 
 func _has_transition(sm: AnimationNodeStateMachine, from: StringName, to: StringName) -> bool:
 	for i in sm.get_transition_count():
