@@ -131,11 +131,6 @@ Comparing with Godot bulti-in timer, it has advantages:
 ### StateMachine and State
 A simple implementation of state machine. Just another lovely wheel :)
 
-### AnimationStateMachine and AnimationState
-A state machine wires up all animations into animation tree and uses current state to transition animation.
-
-Once you finish editing animation states under the machine, click button 'Build Tree Root' in Inspector to re-build all animations (and transitions) in the animation tree.
-
 ## Tools in Godot editor
 Some tools are added into Godot editor once plugin is enabled.
 

@@ -131,11 +131,6 @@ var label_visible: bool:
 ### StateMachine and State
 一个简单的状态机实现。就另一个可爱的轮子罢了：）
 
-### AnimationStateMachine and AnimationState
-一个可以把所有动画都绑定进动画树并通过当前状态来实现动画过渡的状态机。
-
-当你完成了动画状态机下所有的动画状态，在Inspector里点击Build Tree Root按钮来重新动画树内的节点。
-
 ## Tools in Godot editor
 一旦插件启用后，一些工具界面会被加入Godot编辑器。
 
