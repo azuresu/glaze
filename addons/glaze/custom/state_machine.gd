@@ -6,23 +6,21 @@ signal state_entered(state: State)
 signal state_exited(state: State)
 
 var current_state: State
-var states: Dictionary
 
-func set_current_state(state_name: String, params:= {}) -> void:
+func find_state(state_name: StringName) -> State:
+	for ch in get_children():
+		if ch.name == state_name:
+			return ch
+	return null
+
+func set_current_state(state_name: StringName, params:= {}) -> void:
 	_set_current_state.call_deferred(state_name, params)
 
 func _ready() -> void:
 	for ch in get_children():
 		if ch is State:
-			states[ch.name] = ch
-		else:
-			Glaze.log_warn("Non-state node: %s is under state machine: %s", ch, self)
-	if states:
-		current_state = states.values()[0]
-		Glaze.log_debug("State machine: %s has initial state: %s", self, current_state)
-	else:
-		if not Engine.is_editor_hint():
-			Glaze.log_warn("No state found in state machine: %s", self)
+			current_state = ch
+			break
 
 func _process(delta: float) -> void:
 	if current_state:
@@ -35,8 +33,9 @@ func _physics_process(delta: float) -> void:
 		current_state._physics_update(delta)
 		Glaze.log_debug("State machine: %s physics-updated state: %s", self, current_state)
 
-func _set_current_state(state_name: String, params:= {}) -> void:
-	if state_name in states:
+func _set_current_state(state_name: StringName, params:= {}) -> void:
+	var next_state = find_state(state_name)
+	if next_state:
 		if current_state and current_state.name == state_name:
 			if not current_state.reset_when_transition_to_self:
 				return
@@ -44,7 +43,7 @@ func _set_current_state(state_name: String, params:= {}) -> void:
 			current_state._exit()
 			state_exited.emit(current_state)
 			Glaze.log_debug("Current state exited: %s" % current_state)
-		current_state = states[state_name]
+		current_state = next_state
 		for k in params:
 			if k in current_state:
 				current_state[k] = params[k]

@@ -12,7 +12,7 @@ var animation_time: float
 func get_speed_scale() -> float:
 	return speed_scale
 
-func transition(state_name: String, params:= {}) -> void:
+func transition(state_name: StringName, params:= {}) -> void:
 	super.transition(state_name, params)
 	# Some states can be transitioned to itself when agent requires like melee and roll.
 	if machine.current_state and machine.current_state.name == state_name:

@@ -11,6 +11,11 @@ class_name AnimationStateMachine extends StateMachine
 var _animation_conditions: Dictionary[String, bool]
 var _animation_time_scale:= 1.0
 
+func get_animation_states() -> Array[AnimationState]:
+	var r: Array[AnimationState]
+	r.assign(get_children().filter(func(ch): return ch is AnimationState))
+	return r
+
 func set_animation_condition(param_name: String, param_value: bool) -> void:
 	if not param_name in _animation_conditions or not _animation_conditions[param_name] == param_value:
 		_animation_conditions[param_name] = param_value

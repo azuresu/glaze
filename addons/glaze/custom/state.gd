@@ -9,7 +9,7 @@ var machine: StateMachine:
 
 var update_time: float
 
-func transition(state_name: String, params:= {}) -> void:
+func transition(state_name: StringName, params:= {}) -> void:
 	machine.set_current_state(state_name, params)
 
 ## Called when state enters as current.
